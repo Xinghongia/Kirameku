@@ -91,6 +91,40 @@ add_header Cache-Control "no-cache, no-store, must-revalidate";
 
 下次再遇到类似问题，第一件事：`curl` 对比，查缓存。
 
+其实 Nginx 默认不缓存代理内容。是宝塔面板帮你开的，它觉得缓存能减轻后端压力。
+
+不加缓存会怎样：
+
+每个请求都打到 Next.js 进程（端口 3000）
+你的服务器只有 1.8GB 内存，Next.js 本身就占 500MB+
+如果访问量大，进程可能会崩
+加缓存的好处：
+
+Nginx 直接返回缓存的 HTML/JS/CSS，不走 Next.js
+响应更快，后端压力更小
+对你这种小服务器其实挺重要的
+问题是宝塔的缓存太激进了，连 HTML 都缓存，导致部署后页面不更新。
+
+更好的方案是只缓存静态资源（JS/CSS/图片），不缓存 HTML：
+
+对这个个人博客来说，关掉缓存完全没问题。访问量不大，Next.js 能扛得住。
+
+如果以后流量大了，更好的做法是只缓存静态资源，不缓存 HTML。Next.js 的 JS/CSS 文件名自带 hash（chunk.abc123.js），内容变了文件名就变了，可以放心缓存
+
 ```
+# 静态资源缓存 30 天（Next.js 带 hash，更新自动换文件名）
+location /_next/static/ {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_cache_valid 200 30d;
+    add_header Cache-Control "public, max-age=2592000";
+}
+
+# HTML 不缓存
+location / {
+    proxy_pass http://127.0.0.1:3000;
+    proxy_cache off;
+    add_header Cache-Control "no-cache";
+    # ...
+}
 
 ```

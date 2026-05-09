@@ -34,11 +34,11 @@ export default async function AboutPage() {
   }
 
   return (
-    <FadeIn className="w-full max-w-4xl mx-auto py-12 px-4 sm:px-10 relative z-10">
+    <FadeIn className="w-full max-w-4xl mx-auto py-6 md:py-12 px-4 sm:px-10 relative z-10">
       <div className="bg-white/40 dark:bg-slate-800/50 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 dark:border-white/10 overflow-hidden transition-colors duration-700">
 
         {/* 封面大图 */}
-        <div className="w-full h-48 md:h-64 relative bg-slate-200 dark:bg-slate-700 overflow-hidden group">
+        <div className="w-full h-36 md:h-64 relative bg-slate-200 dark:bg-slate-700 overflow-hidden group">
           <img
             src={coverImage}
             alt="About Hero"
@@ -47,9 +47,9 @@ export default async function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
         </div>
 
-        <div className="px-8 md:px-16 pb-16 relative">
+        <div className="px-4 md:px-16 pb-8 md:pb-16 relative">
           {/* 头像 */}
-          <div className="w-32 h-32 rounded-full border-4 border-white dark:border-slate-800 shadow-2xl overflow-hidden -mt-16 relative z-20 bg-white">
+          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white dark:border-slate-800 shadow-2xl overflow-hidden -mt-12 md:-mt-16 relative z-20 bg-white">
             <img
               src={siteConfig.avatarUrl}
               alt="avatar"
@@ -58,11 +58,11 @@ export default async function AboutPage() {
           </div>
 
           {/* 标题区 */}
-          <div className="mt-6 mb-8 border-b border-slate-300/50 dark:border-slate-700 pb-8">
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-3 transition-colors duration-700">
+          <div className="mt-4 md:mt-6 mb-5 md:mb-8 border-b border-slate-300/50 dark:border-slate-700 pb-5 md:pb-8">
+            <h1 className="text-2xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-2 md:mb-3 transition-colors duration-700">
               关于我
             </h1>
-            <p className="text-lg text-indigo-600 dark:text-indigo-400 font-bold tracking-widest uppercase transition-colors duration-700">
+            <p className="text-sm md:text-lg text-indigo-600 dark:text-indigo-400 font-bold tracking-widest uppercase transition-colors duration-700">
               Hello World, I&apos;m {siteConfig.authorName}
             </p>
           </div>
@@ -154,7 +154,7 @@ export default async function AboutPage() {
             `}</style>
 
             <div
-              className="prose prose-slate dark:prose-invert prose-lg max-w-none text-slate-800 dark:text-slate-200 transition-colors duration-700 leading-relaxed"
+              className="prose prose-sm md:prose-lg prose-slate dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 transition-colors duration-700 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: contentHtml }}
             />
           </div>

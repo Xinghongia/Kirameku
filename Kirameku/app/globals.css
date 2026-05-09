@@ -3,6 +3,11 @@
 /* Tailwind CSS 4 class-based dark mode */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* 防止滚动条出现/消失导致页面抖动 — 始终显示滚动条 */
+html {
+  overflow-y: scroll;
+}
+
 /* ========== 毛玻璃基础样式 ========== */
 
 /* backdrop-filter 由 Tailwind 类自行处理，不全局覆盖 */

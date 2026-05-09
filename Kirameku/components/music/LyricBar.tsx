@@ -53,7 +53,7 @@ export default function LyricBar() {
       `}</style>
 
       <div
-        className="w-full rounded-3xl bg-slate-900/80 dark:bg-slate-950/90 backdrop-blur-xl border border-white/10 shadow-2xl p-5 flex items-center justify-between transition-all duration-700 hover:shadow-indigo-500/20 group h-20"
+        className="w-full rounded-3xl bg-slate-900/80 dark:bg-slate-950/90 backdrop-blur-xl border border-white/10 shadow-2xl p-3 md:p-5 flex items-center justify-between transition-all duration-700 hover:shadow-indigo-500/20 group h-14 md:h-20"
         onClick={() => { if (!isPlaying && saying) refreshSaying(); }}
       >
         {/* Waveform */}

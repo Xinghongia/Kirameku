@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, Query, Request
 from sqlmodel import Session
 
-from app.database import get_session
+from app.deps import get_session
 from app.schemas import CommentCreate, CommentOut, CommentAdminUpdate
 from app.services import comment_service
-from app.utils.auth import get_current_user
+from app.deps import get_current_user
 
 router = APIRouter(prefix="/api/comments", tags=["评论"])
 

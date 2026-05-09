@@ -2,11 +2,12 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 
-from app.database import get_session
+from app.deps import get_session
 from app.models import User
 from app.schemas import LoginRequest
 from app.config import ACCESS_TOKEN_EXPIRE_HOURS
-from app.utils.auth import verify_password, create_token, hash_password, get_current_user
+from app.deps import get_current_user
+from app.utils.auth import verify_password, create_token, hash_password
 
 router = APIRouter(prefix="/api/auth", tags=["认证"])
 

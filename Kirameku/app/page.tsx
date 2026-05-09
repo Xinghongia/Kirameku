@@ -15,16 +15,18 @@ const SiteDashboard = dynamic(() => import("@/components/widgets/SiteDashboard")
 
 export default function Home() {
   return (
-    <div className="w-full max-w-6xl mx-auto py-12 px-4 sm:px-10 relative z-10">
+    <div className="w-full max-w-6xl mx-auto py-6 md:py-12 px-4 sm:px-10 relative z-10">
       {/* 搜索栏 */}
       <FadeIn>
-        <SearchBar />
+        <div className="hidden md:block">
+          <SearchBar />
+        </div>
       </FadeIn>
 
-      <main className="flex flex-col gap-6 w-full">
+      <main className="flex flex-col gap-4 md:gap-6 w-full">
         {/* 第一行：个人信息 + 播放器 */}
         <FadeIn delay={0.1}>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 w-full items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 w-full items-stretch">
             <div className="md:col-span-8 flex w-full">
               <ProfileCard />
             </div>
@@ -43,13 +45,13 @@ export default function Home() {
 
         {/* 第二行：照片墙 + 文章 + 说说 + 舔狗日记 */}
         <FadeIn delay={0.2}>
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 w-full items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 w-full items-stretch">
             <div className="md:col-span-4 h-full">
               <PhotoWallPreview />
             </div>
-            <div className="md:col-span-8 flex flex-col gap-6 h-full">
+            <div className="md:col-span-8 flex flex-col gap-4 md:gap-6 h-full">
               <LatestPostsCarousel />
-              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 flex-1 md:min-h-[220px] items-stretch">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 flex-1 md:min-h-[220px] items-stretch">
                 <div className="md:col-span-8 h-full">
                   <LatestChatterCarousel />
                 </div>

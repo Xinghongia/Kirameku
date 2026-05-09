@@ -51,24 +51,21 @@ function formatDate(dateStr: string): string {
   return `${d.getFullYear()}.${d.getMonth() + 1}.${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 }
 
-// ── 常量 ─────────────────────────────────────────────
-
-const CARD_W = 240;
-const CARD_H = 230;
-const CARD_GAP = 60;
-const RIVER_Y = 240;
-const SVG_TOP = -100;
-const AMPLITUDE = 80;
-const WAVELENGTH = 600;
-const PADDING = 600;
-
 // ── 主组件 ────────────────────────────────────────────
 
 export default function TimelinePage() {
   const router = useRouter();
   const [allPosts, setAllPosts] = useState<PostItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
   const didDrag = useRef(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   useEffect(() => {
     getPosts({ status: "published", page: 1, size: 200 })
@@ -96,6 +93,16 @@ export default function TimelinePage() {
     [allPosts]
   );
 
+  // 响应式常量
+  const CARD_W = isMobile ? 170 : 240;
+  const CARD_H = isMobile ? 180 : 230;
+  const CARD_GAP = isMobile ? 40 : 60;
+  const RIVER_Y = isMobile ? 180 : 240;
+  const SVG_TOP = -100;
+  const AMPLITUDE = isMobile ? 50 : 80;
+  const WAVELENGTH = isMobile ? 400 : 600;
+  const PADDING = isMobile ? 300 : 600;
+
   const totalWidth = PADDING * 2 + sorted.length * (CARD_W + CARD_GAP) - CARD_GAP;
   const svgHeight = RIVER_Y + AMPLITUDE + CARD_H + 120 - SVG_TOP;
 
@@ -113,7 +120,7 @@ export default function TimelinePage() {
       parts.push(`${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${y.toFixed(1)}`);
     }
     return parts.join(" ");
-  }, [totalWidth]);
+  }, [totalWidth, RIVER_Y, AMPLITUDE, WAVELENGTH]);
 
   // 河流底部镜像
   const riverPathBottom = useMemo(() => {
@@ -129,22 +136,22 @@ export default function TimelinePage() {
       parts.push(`${i === 0 ? "M" : "L"} ${x.toFixed(1)} ${(y + 12).toFixed(1)}`);
     }
     return parts.join(" ");
-  }, [totalWidth]);
+  }, [totalWidth, RIVER_Y, AMPLITUDE, WAVELENGTH]);
 
 
   // ── 加载态 ──
   if (loading) {
     return (
-      <div className="w-full py-12">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
-          <div className="flex items-center gap-3 mb-2">
-            <Clock className="w-7 h-7 text-sky-500" />
-            <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">归档</h1>
+      <div className="w-full py-6 md:py-12">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-3 md:mb-4">
+          <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
+            <Clock className="w-5 h-5 md:w-7 md:h-7 text-sky-500" />
+            <h1 className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100">归档</h1>
           </div>
-          <p className="text-slate-500 dark:text-slate-400 ml-10">时光河流 · 记录每一个瞬间</p>
+          <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 ml-7 md:ml-10">时光河流 · 记录每一个瞬间</p>
         </motion.div>
-        <div className="flex items-center justify-center py-32">
-          <div className="w-8 h-8 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
+        <div className="flex items-center justify-center py-20 md:py-32">
+          <div className="w-6 h-6 md:w-8 md:h-8 border-2 border-sky-500 border-t-transparent rounded-full animate-spin" />
         </div>
       </div>
     );
@@ -153,31 +160,31 @@ export default function TimelinePage() {
   // ── 空态 ──
   if (!sorted.length) {
     return (
-      <div className="w-full py-12">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
-          <div className="flex items-center gap-3 mb-2">
-            <Clock className="w-7 h-7 text-sky-500" />
-            <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">归档</h1>
+      <div className="w-full py-6 md:py-12">
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-3 md:mb-4">
+          <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
+            <Clock className="w-5 h-5 md:w-7 md:h-7 text-sky-500" />
+            <h1 className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100">归档</h1>
           </div>
-          <p className="text-slate-500 dark:text-slate-400 ml-10">时光河流 · 记录每一个瞬间</p>
+          <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 ml-7 md:ml-10">时光河流 · 记录每一个瞬间</p>
         </motion.div>
-        <div className="flex flex-col items-center justify-center py-32 text-slate-400">
-          <BookOpen className="w-12 h-12 mb-4 opacity-40" />
-          <p>暂无文章</p>
+        <div className="flex flex-col items-center justify-center py-20 md:py-32 text-slate-400">
+          <BookOpen className="w-8 h-8 md:w-12 md:h-12 mb-3 md:mb-4 opacity-40" />
+          <p className="text-sm md:text-base">暂无文章</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="w-full py-12">
+    <div className="w-full py-6 md:py-12">
       {/* 页头 */}
-      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
-        <div className="flex items-center gap-3 mb-2">
-          <Clock className="w-7 h-7 text-sky-500" />
-          <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">归档</h1>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 mb-3 md:mb-4">
+        <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
+          <Clock className="w-5 h-5 md:w-7 md:h-7 text-sky-500" />
+          <h1 className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100">归档</h1>
         </div>
-        <p className="text-slate-500 dark:text-slate-400 ml-10">时光河流 · 共 {allPosts.length} 篇文章</p>
+        <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 ml-7 md:ml-10">时光河流 · 共 {allPosts.length} 篇文章</p>
       </motion.div>
 
       {/* 拖动区 */}
@@ -219,11 +226,11 @@ export default function TimelinePage() {
             </defs>
 
             {/* 河流发光层 */}
-            <path d={riverPath} fill="none" stroke="url(#river-grad)" strokeWidth="20" filter="url(#river-glow)" opacity="0.3" />
+            <motion.path d={riverPath} fill="none" stroke="url(#river-grad)" strokeWidth="20" filter="url(#river-glow)" opacity="0.3" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, ease: "easeInOut" }} />
             {/* 河流主体 */}
-            <path d={riverPath} fill="none" stroke="url(#river-grad)" strokeWidth="3" strokeLinecap="round" />
+            <motion.path d={riverPath} fill="none" stroke="url(#river-grad)" strokeWidth="3" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, ease: "easeInOut" }} />
             {/* 河流底部微光 */}
-            <path d={riverPathBottom} fill="none" stroke="url(#river-grad-dark)" strokeWidth="1" opacity="0.15" />
+            <motion.path d={riverPathBottom} fill="none" stroke="url(#river-grad-dark)" strokeWidth="1" opacity="0.15" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, ease: "easeInOut" }} />
 
             {/* 流动粒子 */}
             {[0, 0.15, 0.3, 0.5, 0.65, 0.8].map((offset, i) => (
@@ -247,69 +254,71 @@ export default function TimelinePage() {
                 AMPLITUDE * 0.2 * Math.sin((cx / (WAVELENGTH * 1.5)) * Math.PI * 2 + 2.5);
 
               const isAbove = i % 2 === 0;
-              const cardY = isAbove ? waveY - 50 - CARD_H : waveY + 50;
+              const cardY = isAbove ? waveY - (isMobile ? 30 : 50) - CARD_H : waveY + (isMobile ? 30 : 50);
               const lineStartY = isAbove ? cardY + CARD_H : cardY;
               const lineEndY = waveY;
               const catColor = getCatColor(post.category);
               const dateStr = formatDate(post.published_at || post.created_at);
 
+              const delay = 1.6 + i * 0.08;
+
               return (
-                <g key={post.id} className="cursor-pointer" onClick={(e) => handlePostClick(e, post.slug)}>
+                <motion.g key={post.id} className="cursor-pointer" onClick={(e) => handlePostClick(e, post.slug)} initial={{ opacity: 0, y: isAbove ? -30 : 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay, ease: "easeOut" }}>
                   {/* 连接线 */}
                   <line x1={cx} y1={lineStartY} x2={cx} y2={lineEndY} stroke={catColor} strokeWidth="1.5" opacity="0.4" strokeDasharray="4 3" />
                   {/* 河流上的节点 */}
-                  <circle cx={cx} cy={waveY} r="6" fill="#ffffff" />
-                  <circle cx={cx} cy={waveY} r="10" fill="#ffffff" opacity="0.25" />
+                  <motion.circle cx={cx} cy={waveY} r="6" fill="#ffffff" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.3, delay: delay - 0.1 }} />
+                  <motion.circle cx={cx} cy={waveY} r="10" fill="#ffffff" opacity="0.25" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.3, delay: delay - 0.05 }} />
                   {/* 时间标注 */}
-                  <text x={cx} y={waveY + (isAbove ? 22 : -12)} textAnchor="middle" fill="#f8fafc" fontSize="11" fontWeight="700">
+                  <text x={cx} y={waveY + (isAbove ? 22 : -12)} textAnchor="middle" fill="#f8fafc" fontSize={isMobile ? "9" : "11"} fontWeight="700">
                     {dateStr}
                   </text>
 
                   {/* 卡片背景 */}
                   <foreignObject x={x} y={cardY} width={CARD_W} height={CARD_H} style={{ overflow: "visible" }}>
-                    <div className="w-full h-full rounded-2xl overflow-hidden bg-white/60 dark:bg-slate-800/70 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                    <div className="w-full h-full rounded-xl md:rounded-2xl overflow-hidden bg-white/60 dark:bg-slate-800/70 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
                       {/* 封面 */}
                       {post.cover ? (
-                        <div className="relative h-[100px] overflow-hidden">
+                        <div className="relative overflow-hidden" style={{ height: isMobile ? 70 : 100 }}>
                           <img src={post.cover} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                          <div className="absolute bottom-2 left-3 flex items-center gap-1.5 text-white/80 text-[10px]">
-                            <Calendar className="w-3 h-3" />
+                          <div className="absolute bottom-1.5 left-2 md:bottom-2 md:left-3 flex items-center gap-1 text-white/80 text-[8px] md:text-[10px]">
+                            <Calendar className="w-2.5 h-2.5 md:w-3 md:h-3" />
                             {dateStr}
                           </div>
                         </div>
                       ) : (
-                        <div className="h-[100px] bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center">
-                          <BookOpen className="w-8 h-8 text-slate-300 dark:text-slate-600" />
-                          <span className="absolute bottom-2 left-3 text-[10px] text-slate-400">{dateStr}</span>
+                        <div className="bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-800 flex items-center justify-center" style={{ height: isMobile ? 70 : 100 }}>
+                          <BookOpen className="w-6 h-6 md:w-8 md:h-8 text-slate-300 dark:text-slate-600" />
+                          <span className="absolute bottom-1.5 left-2 md:bottom-2 md:left-3 text-[8px] md:text-[10px] text-slate-400">{dateStr}</span>
                         </div>
                       )}
 
                       {/* 内容 */}
-                      <div className="p-3">
-                        <h3 className="text-xs font-bold text-slate-800 dark:text-slate-200 line-clamp-2 mb-1.5 group-hover:text-sky-500 transition-colors leading-snug">
+                      <div className="p-2 md:p-3">
+                        <h3 className="text-[10px] md:text-xs font-bold text-slate-800 dark:text-slate-200 line-clamp-2 mb-1 md:mb-1.5 group-hover:text-sky-500 transition-colors leading-snug">
                           {post.title}
                         </h3>
                         {post.description && (
-                          <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 mb-2 leading-relaxed">
+                          <p className="text-[8px] md:text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2 mb-1.5 md:mb-2 leading-relaxed">
                             {post.description}
                           </p>
                         )}
                         <div className="flex items-center justify-between">
                           {post.category ? (
-                            <span className={`text-[9px] px-1.5 py-0.5 rounded-full font-medium ${getCatBgColor(post.category)} ${getCatTextColor(post.category)}`}>
+                            <span className={`text-[7px] md:text-[9px] px-1 md:px-1.5 py-0.5 rounded-full font-medium ${getCatBgColor(post.category)} ${getCatTextColor(post.category)}`}>
                               {post.category}
                             </span>
                           ) : <span />}
-                          <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400 text-[10px]">
-                            <span className="flex items-center gap-0.5"><Eye className="w-3 h-3" />{post.views}</span>
-                            <span className="flex items-center gap-0.5"><Heart className="w-3 h-3" />{post.likes}</span>
+                          <div className="flex items-center gap-1.5 md:gap-2 text-slate-500 dark:text-slate-400 text-[8px] md:text-[10px]">
+                            <span className="flex items-center gap-0.5"><Eye className="w-2.5 h-2.5 md:w-3 md:h-3" />{post.views}</span>
+                            <span className="flex items-center gap-0.5"><Heart className="w-2.5 h-2.5 md:w-3 md:h-3" />{post.likes}</span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </foreignObject>
-                </g>
+                </motion.g>
               );
             })}
           </svg>
@@ -317,7 +326,7 @@ export default function TimelinePage() {
         </div>
 
       {/* 提示 */}
-      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-center text-xs text-slate-400 mt-4 max-w-6xl mx-auto">
+      <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-center text-[10px] md:text-xs text-slate-400 mt-3 md:mt-4 max-w-6xl mx-auto">
         左右滑动浏览时光河流 · 点击文章卡片跳转阅读
       </motion.p>
 

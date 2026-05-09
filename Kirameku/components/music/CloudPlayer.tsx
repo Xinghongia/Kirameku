@@ -46,7 +46,7 @@ export default function CloudPlayer() {
 
   if (isLoading) {
     return (
-      <div className="h-full w-full rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl p-6 flex items-center justify-center min-h-[280px]">
+      <div className="h-full w-full rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl p-6 flex items-center justify-center min-h-[200px] md:min-h-[280px]">
         <div className="text-sm text-slate-400 animate-pulse">加载音乐中...</div>
       </div>
     );
@@ -56,7 +56,7 @@ export default function CloudPlayer() {
     return (
       <div
         onClick={() => router.push("/music")}
-        className="h-full w-full rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl p-6 flex flex-col items-center justify-center gap-4 min-h-[280px] cursor-pointer transition-all duration-700 hover:scale-[1.02] hover:shadow-2xl group"
+        className="h-full w-full rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl p-6 flex flex-col items-center justify-center gap-4 min-h-[200px] md:min-h-[280px] cursor-pointer transition-all duration-700 hover:scale-[1.02] hover:shadow-2xl group"
       >
         <svg className="w-10 h-10 text-indigo-400 dark:text-indigo-500 opacity-60" viewBox="0 0 24 24" fill="currentColor">
           <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5 3.871 3.871 0 01-2.748-1.179zm10 0C13.553 16.227 13 15 13 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311 1.804.167 3.226 1.648 3.226 3.489a3.5 3.5 0 01-3.5 3.5 3.871 3.871 0 01-2.748-1.179z" />
@@ -108,14 +108,14 @@ export default function CloudPlayer() {
 
       <div
         onClick={() => router.push("/music")}
-        className="h-full w-full rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl p-6 flex flex-col justify-between transition-all duration-700 hover:scale-[1.02] relative group overflow-hidden cursor-pointer min-h-[280px]"
+        className="h-full w-full rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl p-4 md:p-6 flex flex-col justify-between transition-all duration-700 hover:scale-[1.02] relative group overflow-hidden cursor-pointer min-h-[200px] md:min-h-[280px]"
       >
         <div className={`absolute -top-20 -right-20 w-48 h-48 bg-indigo-500/20 blur-[50px] rounded-full transition-opacity duration-1000 ${isPlaying ? "opacity-100" : "opacity-30"}`} />
 
         {/* Cover + Info */}
-        <div className="flex items-center gap-5 relative z-10 mb-6 mt-2">
+        <div className="flex items-center gap-3 md:gap-5 relative z-10 mb-3 md:mb-6 mt-1 md:mt-2">
           <div
-            className="w-20 h-20 rounded-full border-2 border-white/50 shadow-lg flex-shrink-0 overflow-hidden relative"
+            className="w-14 h-14 md:w-20 md:h-20 rounded-full border-2 border-white/50 shadow-lg flex-shrink-0 overflow-hidden relative"
             style={{ animation: isPlaying ? "spin 6s linear infinite" : "none" }}
           >
             <img src={currentSong.cover} alt="cover" className="w-full h-full object-cover" />
@@ -126,10 +126,10 @@ export default function CloudPlayer() {
             <span className="text-[10px] font-black text-indigo-500 dark:text-indigo-400 tracking-widest uppercase bg-white/50 dark:bg-slate-900/50 px-2 py-0.5 rounded-sm shadow-sm">
               Cloud Music
             </span>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white truncate drop-shadow-sm mt-1">
+            <h3 className="text-base md:text-xl font-bold text-slate-900 dark:text-white truncate drop-shadow-sm mt-1">
               {currentSong.title}
             </h3>
-            <p className="text-sm text-slate-700 dark:text-slate-300 font-medium truncate drop-shadow-sm">
+            <p className="text-xs md:text-sm text-slate-700 dark:text-slate-300 font-medium truncate drop-shadow-sm">
               {currentSong.artist}
             </p>
           </div>

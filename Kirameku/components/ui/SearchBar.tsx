@@ -143,7 +143,7 @@ export default function SearchBar() {
                     href={
                       item.type === "post"
                         ? `/posts/${item.slug}`
-                        : `/chatter/${item.slug}`
+                        : `/messages/${item.slug}`
                     }
                     key={`${item.type}-${item.slug}`}
                     onClick={() => setIsOpen(false)}

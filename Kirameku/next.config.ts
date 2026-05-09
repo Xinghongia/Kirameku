@@ -32,6 +32,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "static.hiromu.top" },
       { protocol: "https", hostname: "hiromu520.oss-cn-beijing.aliyuncs.com" },
       { protocol: "https", hostname: "picsum.photos" },
+      { protocol: "https", hostname: "avatars.githubusercontent.com" },
     ],
   },
 };

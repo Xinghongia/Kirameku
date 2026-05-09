@@ -105,7 +105,7 @@ export default function PostCard({ post, index }: PostCardProps) {
 
               {/* 置顶标记 */}
               {post.is_pinned && (
-                <div className="absolute top-4 left-4 flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/90 backdrop-blur-sm text-white text-xs font-medium">
+                <div className="absolute top-2 left-2 md:top-4 md:left-4 flex items-center gap-1 px-2 py-0.5 md:px-3 md:py-1 rounded-full bg-amber-500/90 backdrop-blur-sm text-white text-[10px] md:text-xs font-medium">
                   <Pin className="w-3 h-3" />
                   置顶
                 </div>
@@ -113,17 +113,17 @@ export default function PostCard({ post, index }: PostCardProps) {
 
               {/* 分类标签 */}
               {post.category && (
-                <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-sky-500/80 backdrop-blur-sm text-white text-xs font-medium">
+                <div className="absolute top-2 right-2 md:top-4 md:right-4 px-2 py-0.5 md:px-3 md:py-1 rounded-full bg-sky-500/80 backdrop-blur-sm text-white text-[10px] md:text-xs font-medium">
                   {post.category}
                 </div>
               )}
 
               {/* 底部信息 */}
-              <div className="absolute bottom-0 left-0 right-0 p-5">
-                <h3 className="text-lg font-bold text-white mb-2 line-clamp-2 leading-snug">
+              <div className="absolute bottom-0 left-0 right-0 p-3 md:p-5">
+                <h3 className="text-base md:text-lg font-bold text-white mb-1 md:mb-2 line-clamp-2 leading-snug">
                   {post.title}
                 </h3>
-                <p className="text-white/70 text-sm line-clamp-2 mb-3">
+                <p className="text-white/70 text-xs md:text-sm line-clamp-2 mb-2 md:mb-3">
                   {post.description}
                 </p>
                 <div className="flex items-center justify-between text-white/60 text-xs">

@@ -35,6 +35,25 @@ const DujitangApp = lazy(() => import("./toolbox/DujitangApp"));
 const HistoryApp = lazy(() => import("./toolbox/HistoryApp"));
 const WeatherApp = lazy(() => import("./toolbox/WeatherApp"));
 const RandomImageApp = lazy(() => import("./toolbox/RandomImageApp"));
+const BmiApp = lazy(() => import("./toolbox/BmiApp"));
+const BilibiliHotApp = lazy(() => import("./toolbox/BilibiliHotApp"));
+const GoldPriceApp = lazy(() => import("./toolbox/GoldPriceApp"));
+const JiakaoApp = lazy(() => import("./toolbox/JiakaoApp"));
+const HoroscopeApp = lazy(() => import("./toolbox/HoroscopeApp"));
+const GenshinApp = lazy(() => import("./toolbox/GenshinApp"));
+const Random4kApp = lazy(() => import("./toolbox/Random4kApp"));
+const GuanyinApp = lazy(() => import("./toolbox/GuanyinApp"));
+const GamesApp = lazy(() => import("./toolbox/GamesApp"));
+const WorldTimeApp = lazy(() => import("./toolbox/WorldTimeApp"));
+const HotBoardApp = lazy(() => import("./toolbox/HotBoardApp"));
+const PhoneInfoApp = lazy(() => import("./toolbox/PhoneInfoApp"));
+const ProgrammerHistoryApp = lazy(() => import("./toolbox/ProgrammerHistoryApp"));
+const TrackingApp = lazy(() => import("./toolbox/TrackingApp"));
+const MovieBoxOfficeApp = lazy(() => import("./toolbox/MovieBoxOfficeApp"));
+const GitHubRepoApp = lazy(() => import("./toolbox/GitHubRepoApp"));
+const GitHubUserApp = lazy(() => import("./toolbox/GitHubUserApp"));
+const MyIPApp = lazy(() => import("./toolbox/MyIPApp"));
+const SearchApp = lazy(() => import("./toolbox/SearchApp"));
 
 interface AppDef {
   id: string;
@@ -44,49 +63,240 @@ interface AppDef {
 }
 
 const allApps: AppDef[] = [
+  // ── 热门资讯 ──
   {
-    id: "calendar",
-    name: "日历",
+    id: "search",
+    name: "智能搜索",
     icon: (
       <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <rect x="3" y="4" width="18" height="18" rx="2" stroke="#6366f1" strokeWidth="1.5" />
-        <path d="M16 2v4M8 2v4M3 10h18" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="8" cy="15" r="1" fill="#6366f1" />
-        <circle cx="12" cy="15" r="1" fill="#a78bfa" />
-        <circle cx="16" cy="15" r="1" fill="#6366f1" />
+        <circle cx="11" cy="11" r="7" stroke="#3b82f6" strokeWidth="1.5" />
+        <path d="M16 16l4.5 4.5" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M8 11h6M11 8v6" stroke="#3b82f6" strokeWidth="1.2" strokeLinecap="round" opacity="0.4" />
       </svg>
     ),
-    component: CalendarApp,
+    component: SearchApp,
   },
   {
-    id: "calculator",
-    name: "计算器",
+    id: "hotboard",
+    name: "全网热榜",
     icon: (
       <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <rect x="4" y="2" width="16" height="20" rx="2" stroke="#f59e0b" strokeWidth="1.5" />
-        <rect x="7" y="5" width="10" height="4" rx="1" fill="#fbbf24" opacity="0.3" />
-        <circle cx="8" cy="13" r="1" fill="#f59e0b" />
-        <circle cx="12" cy="13" r="1" fill="#f59e0b" />
-        <circle cx="16" cy="13" r="1" fill="#f59e0b" />
-        <circle cx="8" cy="17" r="1" fill="#f59e0b" />
-        <circle cx="12" cy="17" r="1" fill="#f59e0b" />
-        <circle cx="16" cy="17" r="1" fill="#f59e0b" />
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" />
+        <path d="M8 14h8M9 11h6" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
     ),
-    component: CalculatorApp,
+    component: HotBoardApp,
   },
   {
-    id: "clock",
-    name: "时钟",
+    id: "bilibilihot",
+    name: "B站热榜",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <path d="M4 7h16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V9a2 2 0 012-2z" stroke="#00a1d6" strokeWidth="1.5" />
+        <path d="M8 4l4 3 4-3" stroke="#00a1d6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M9 13l2 2 4-4" stroke="#00a1d6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    component: BilibiliHotApp,
+  },
+  {
+    id: "games",
+    name: "小游戏",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="6" width="18" height="12" rx="3" stroke="#6366f1" strokeWidth="1.5" />
+        <circle cx="8" cy="12" r="1.5" fill="#6366f1" />
+        <path d="M14 11h2M15 10v2" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+        <circle cx="18" cy="10" r="0.5" fill="#6366f1" />
+        <circle cx="18" cy="14" r="0.5" fill="#6366f1" />
+      </svg>
+    ),
+    component: GamesApp,
+  },
+  {
+    id: "weather",
+    name: "天气",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="8" r="4" stroke="#0ea5e9" strokeWidth="1.5" />
+        <path d="M12 1v2M12 13v2M4.22 4.22l1.42 1.42M16.36 16.36l1.42 1.42M1 8h2M19 8h2M4.22 11.78l1.42-1.42M16.36 5.64l1.42-1.42" stroke="#0ea5e9" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M6 19a4 4 0 014-4h0a3 3 0 013-3 3 3 0 013 3h0a4 4 0 010 8H6z" stroke="#0ea5e9" strokeWidth="1.5" strokeLinejoin="round" />
+      </svg>
+    ),
+    component: WeatherApp,
+  },
+  {
+    id: "goldprice",
+    name: "今日金价",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="#f59e0b" strokeWidth="1.5" />
+        <text x="12" y="16" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#f59e0b">Au</text>
+      </svg>
+    ),
+    component: GoldPriceApp,
+  },
+  {
+    id: "movieboxoffice",
+    name: "实时票房",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <rect x="2" y="4" width="20" height="16" rx="2" stroke="#f59e0b" strokeWidth="1.5" />
+        <path d="M7 4v16M17 4v16M2 10h20M2 16h20" stroke="#f59e0b" strokeWidth="1" opacity="0.3" />
+        <path d="M10 8l2 3 2-3" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    component: MovieBoxOfficeApp,
+  },
+  {
+    id: "githubuser",
+    name: "GitHub用户",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="8" r="4" stroke="#3b82f6" strokeWidth="1.5" />
+        <path d="M4 20c0-3.31 3.58-6 8-6s8 2.69 8 6" stroke="#3b82f6" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
+    component: GitHubUserApp,
+  },
+  {
+    id: "githubrepo",
+    name: "GitHub仓库",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    component: GitHubRepoApp,
+  },
+  {
+    id: "programmer-history",
+    name: "程序员历史",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="4" width="18" height="16" rx="2" stroke="#8b5cf6" strokeWidth="1.5" />
+        <path d="M7 12l2-2-2-2M11 8h4M17 12l-2 2 2 2M13 16h-4" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    component: ProgrammerHistoryApp,
+  },
+  {
+    id: "history",
+    name: "历史今天",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="#6366f1" strokeWidth="1.5" />
+        <polyline points="12 6 12 12 16 14" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="12" cy="12" r="1" fill="#6366f1" />
+      </svg>
+    ),
+    component: HistoryApp,
+  },
+
+  // ── 趣味测试 ──
+  {
+    id: "horoscope",
+    name: "星座运势",
     icon: (
       <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
         <circle cx="12" cy="12" r="9" stroke="#8b5cf6" strokeWidth="1.5" />
-        <path d="M12 7v5l3 3" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="12" cy="12" r="1" fill="#8b5cf6" />
+        <path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z" stroke="#8b5cf6" strokeWidth="1.5" strokeLinejoin="round" />
+        <circle cx="12" cy="12" r="2" fill="#8b5cf6" opacity="0.3" />
       </svg>
     ),
-    component: ClockApp,
+    component: HoroscopeApp,
   },
+  {
+    id: "guanyin",
+    name: "观音灵签",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="#8b5cf6" strokeWidth="1.5" />
+        <path d="M8 14c0 0 1.5 2 4 2s4-2 4-2" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" />
+        <circle cx="9" cy="10" r="1" fill="#8b5cf6" />
+        <circle cx="15" cy="10" r="1" fill="#8b5cf6" />
+        <path d="M12 2v4" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
+    component: GuanyinApp,
+  },
+  {
+    id: "bmi",
+    name: "BMI",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke="#10b981" strokeWidth="1.5" />
+        <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M12 6v4M10 8h4" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M7 18l2-4M17 18l-2-4" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
+    component: BmiApp,
+  },
+  {
+    id: "jiakao",
+    name: "驾考题库",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="5" width="18" height="14" rx="2" stroke="#6366f1" strokeWidth="1.5" />
+        <path d="M7 12h2M15 12h2M12 9v6" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+        <circle cx="8" cy="19" r="1.5" stroke="#6366f1" strokeWidth="1.5" />
+        <circle cx="16" cy="19" r="1.5" stroke="#6366f1" strokeWidth="1.5" />
+      </svg>
+    ),
+    component: JiakaoApp,
+  },
+
+  // ── 图片壁纸 ──
+  {
+    id: "randomimage",
+    name: "随机图片",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="3" width="18" height="18" rx="3" stroke="#10b981" strokeWidth="1.5" />
+        <circle cx="8.5" cy="8.5" r="2" stroke="#10b981" strokeWidth="1.5" />
+        <path d="M3 16l5-5 4 4 3-3 6 6" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    component: RandomImageApp,
+  },
+  {
+    id: "genshin",
+    name: "原神图片",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="#eab308" strokeWidth="1.5" />
+        <path d="M12 7l2.5 5H9.5L12 7z" stroke="#eab308" strokeWidth="1.5" strokeLinejoin="round" />
+        <path d="M12 12v5" stroke="#eab308" strokeWidth="1.5" strokeLinecap="round" />
+        <circle cx="12" cy="12" r="1" fill="#eab308" />
+      </svg>
+    ),
+    component: GenshinApp,
+  },
+  {
+    id: "random4k",
+    name: "4K图片",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="3" width="18" height="18" rx="3" stroke="#0ea5e9" strokeWidth="1.5" />
+        <text x="12" y="16" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#0ea5e9">4K</text>
+      </svg>
+    ),
+    component: Random4kApp,
+  },
+  {
+    id: "fortune",
+    name: "抽签",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <path d="M9 3L7 21M17 3l-2 18M5 7h14M4 12h16M5 17h14" stroke="#eab308" strokeWidth="1.5" strokeLinecap="round" />
+        <rect x="8" y="1" width="8" height="4" rx="2" stroke="#eab308" strokeWidth="1.5" />
+      </svg>
+    ),
+    component: FortuneDrawApp,
+  },
+
+  // ── 娱乐互动 ──
   {
     id: "hitokoto",
     name: "一言",
@@ -97,6 +307,20 @@ const allApps: AppDef[] = [
       </svg>
     ),
     component: HitokotoApp,
+  },
+  {
+    id: "dujitang",
+    name: "毒鸡汤",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3C7 3 3 7 3 12c0 3 1.5 5.5 4 7l-1 2h12l-1-2c2.5-1.5 4-4 4-7 0-5-4-9-9-9z" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M9 14s1 1.5 3 1.5 3-1.5 3-1.5" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" />
+        <circle cx="9.5" cy="10" r="1" fill="#f59e0b" />
+        <circle cx="14.5" cy="10" r="1" fill="#f59e0b" />
+        <path d="M15 3.5c1 .5 2 1.5 2 2.5" stroke="#f59e0b" strokeWidth="1" strokeLinecap="round" opacity="0.5" />
+      </svg>
+    ),
+    component: DujitangApp,
   },
   {
     id: "dice",
@@ -112,95 +336,6 @@ const allApps: AppDef[] = [
       </svg>
     ),
     component: DiceApp,
-  },
-  {
-    id: "fortune",
-    name: "抽签",
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <path d="M9 3L7 21M17 3l-2 18M5 7h14M4 12h16M5 17h14" stroke="#eab308" strokeWidth="1.5" strokeLinecap="round" />
-        <rect x="8" y="1" width="8" height="4" rx="2" stroke="#eab308" strokeWidth="1.5" />
-      </svg>
-    ),
-    component: FortuneDrawApp,
-  },
-  {
-    id: "password",
-    name: "密码",
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <rect x="5" y="11" width="14" height="10" rx="2" stroke="#10b981" strokeWidth="1.5" />
-        <path d="M8 11V7a4 4 0 118 0v4" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="12" cy="16" r="1.5" fill="#10b981" />
-        <path d="M12 17.5V19" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-    component: PasswordGeneratorApp,
-  },
-  {
-    id: "weather",
-    name: "天气",
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="8" r="4" stroke="#0ea5e9" strokeWidth="1.5" />
-        <path d="M12 1v2M12 13v2M4.22 4.22l1.42 1.42M16.36 16.36l1.42 1.42M1 8h2M19 8h2M4.22 11.78l1.42-1.42M16.36 5.64l1.42-1.42" stroke="#0ea5e9" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M6 19a4 4 0 014-4h0a3 3 0 013-3 3 3 0 013 3h0a4 4 0 010 8H6z" stroke="#0ea5e9" strokeWidth="1.5" strokeLinejoin="round" />
-      </svg>
-    ),
-    component: WeatherApp,
-  },
-  {
-    id: "qrcode",
-    name: "二维码",
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <rect x="3" y="3" width="7" height="7" rx="1" stroke="#8b5cf6" strokeWidth="1.5" />
-        <rect x="14" y="3" width="7" height="7" rx="1" stroke="#8b5cf6" strokeWidth="1.5" />
-        <rect x="3" y="14" width="7" height="7" rx="1" stroke="#8b5cf6" strokeWidth="1.5" />
-        <rect x="5" y="5" width="3" height="3" rx="0.5" fill="#8b5cf6" />
-        <rect x="16" y="5" width="3" height="3" rx="0.5" fill="#8b5cf6" />
-        <rect x="5" y="16" width="3" height="3" rx="0.5" fill="#8b5cf6" />
-        <rect x="14" y="14" width="3" height="3" rx="0.5" fill="#8b5cf6" />
-        <rect x="18" y="14" width="3" height="3" rx="0.5" fill="#8b5cf6" />
-        <rect x="14" y="18" width="3" height="3" rx="0.5" fill="#8b5cf6" />
-        <rect x="18" y="18" width="3" height="3" rx="0.5" fill="#8b5cf6" />
-      </svg>
-    ),
-    component: QRCodeApp,
-  },
-  {
-    id: "converter",
-    name: "换算",
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <path d="M17 4v16M7 20V4" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M21 8l-4-4-4 4M3 16l4 4 4-4" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M3 4h8M13 20h8" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-    component: UnitConverterApp,
-  },
-  {
-    id: "note",
-    name: "记事本",
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <rect x="5" y="3" width="14" height="18" rx="2" stroke="#f59e0b" strokeWidth="1.5" />
-        <path d="M9 7h6M9 11h6M9 15h4" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" />
-        <path d="M5 7h2v2H5z" fill="#fbbf24" opacity="0.3" />
-      </svg>
-    ),
-    component: NoteApp,
-  },
-  {
-    id: "base",
-    name: "进制",
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <path d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    ),
-    component: BaseConverterApp,
   },
   {
     id: "coin",
@@ -226,47 +361,171 @@ const allApps: AppDef[] = [
     ),
     component: RPSApp,
   },
+
+  // ── 实用工具 ──
   {
-    id: "dujitang",
-    name: "毒鸡汤",
+    id: "qrcode",
+    name: "二维码",
     icon: (
       <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <path d="M12 3C7 3 3 7 3 12c0 3 1.5 5.5 4 7l-1 2h12l-1-2c2.5-1.5 4-4 4-7 0-5-4-9-9-9z" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <path d="M9 14s1 1.5 3 1.5 3-1.5 3-1.5" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" />
-        <circle cx="9.5" cy="10" r="1" fill="#f59e0b" />
-        <circle cx="14.5" cy="10" r="1" fill="#f59e0b" />
-        <path d="M15 3.5c1 .5 2 1.5 2 2.5" stroke="#f59e0b" strokeWidth="1" strokeLinecap="round" opacity="0.5" />
+        <rect x="3" y="3" width="7" height="7" rx="1" stroke="#8b5cf6" strokeWidth="1.5" />
+        <rect x="14" y="3" width="7" height="7" rx="1" stroke="#8b5cf6" strokeWidth="1.5" />
+        <rect x="3" y="14" width="7" height="7" rx="1" stroke="#8b5cf6" strokeWidth="1.5" />
+        <rect x="5" y="5" width="3" height="3" rx="0.5" fill="#8b5cf6" />
+        <rect x="16" y="5" width="3" height="3" rx="0.5" fill="#8b5cf6" />
+        <rect x="5" y="16" width="3" height="3" rx="0.5" fill="#8b5cf6" />
+        <rect x="14" y="14" width="3" height="3" rx="0.5" fill="#8b5cf6" />
+        <rect x="18" y="14" width="3" height="3" rx="0.5" fill="#8b5cf6" />
+        <rect x="14" y="18" width="3" height="3" rx="0.5" fill="#8b5cf6" />
+        <rect x="18" y="18" width="3" height="3" rx="0.5" fill="#8b5cf6" />
       </svg>
     ),
-    component: DujitangApp,
+    component: QRCodeApp,
   },
   {
-    id: "history",
-    name: "历史今天",
+    id: "password",
+    name: "密码",
     icon: (
       <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="9" stroke="#6366f1" strokeWidth="1.5" />
-        <polyline points="12 6 12 12 16 14" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        <circle cx="12" cy="12" r="1" fill="#6366f1" />
+        <rect x="5" y="11" width="14" height="10" rx="2" stroke="#10b981" strokeWidth="1.5" />
+        <path d="M8 11V7a4 4 0 118 0v4" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" />
+        <circle cx="12" cy="16" r="1.5" fill="#10b981" />
+        <path d="M12 17.5V19" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
     ),
-    component: HistoryApp,
+    component: PasswordGeneratorApp,
   },
   {
-    id: "randomimage",
-    name: "随机图片",
+    id: "note",
+    name: "记事本",
     icon: (
       <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <rect x="3" y="3" width="18" height="18" rx="3" stroke="#10b981" strokeWidth="1.5" />
-        <circle cx="8.5" cy="8.5" r="2" stroke="#10b981" strokeWidth="1.5" />
-        <path d="M3 16l5-5 4 4 3-3 6 6" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="5" y="3" width="14" height="18" rx="2" stroke="#f59e0b" strokeWidth="1.5" />
+        <path d="M9 7h6M9 11h6M9 15h4" stroke="#f59e0b" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M5 7h2v2H5z" fill="#fbbf24" opacity="0.3" />
       </svg>
     ),
-    component: RandomImageApp,
+    component: NoteApp,
+  },
+  {
+    id: "converter",
+    name: "换算",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <path d="M17 4v16M7 20V4" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M21 8l-4-4-4 4M3 16l4 4 4-4" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M3 4h8M13 20h8" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
+    component: UnitConverterApp,
+  },
+  {
+    id: "base",
+    name: "进制",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <path d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" stroke="#06b6d4" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    component: BaseConverterApp,
+  },
+  {
+    id: "calculator",
+    name: "计算器",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <rect x="4" y="2" width="16" height="20" rx="2" stroke="#f59e0b" strokeWidth="1.5" />
+        <rect x="7" y="5" width="10" height="4" rx="1" fill="#fbbf24" opacity="0.3" />
+        <circle cx="8" cy="13" r="1" fill="#f59e0b" />
+        <circle cx="12" cy="13" r="1" fill="#f59e0b" />
+        <circle cx="16" cy="13" r="1" fill="#f59e0b" />
+        <circle cx="8" cy="17" r="1" fill="#f59e0b" />
+        <circle cx="12" cy="17" r="1" fill="#f59e0b" />
+        <circle cx="16" cy="17" r="1" fill="#f59e0b" />
+      </svg>
+    ),
+    component: CalculatorApp,
+  },
+  {
+    id: "calendar",
+    name: "日历",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <rect x="3" y="4" width="18" height="18" rx="2" stroke="#6366f1" strokeWidth="1.5" />
+        <path d="M16 2v4M8 2v4M3 10h18" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" />
+        <circle cx="8" cy="15" r="1" fill="#6366f1" />
+        <circle cx="12" cy="15" r="1" fill="#a78bfa" />
+        <circle cx="16" cy="15" r="1" fill="#6366f1" />
+      </svg>
+    ),
+    component: CalendarApp,
+  },
+  {
+    id: "myip",
+    name: "IP查询",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="#0ea5e9" strokeWidth="1.5" />
+        <path d="M12 3c-3 4-3 8 0 9s3 5 0 9" stroke="#0ea5e9" strokeWidth="1.5" />
+        <path d="M3 12h18" stroke="#0ea5e9" strokeWidth="1.5" />
+        <circle cx="12" cy="12" r="1.5" fill="#0ea5e9" />
+      </svg>
+    ),
+    component: MyIPApp,
+  },
+  {
+    id: "tracking",
+    name: "快递查询",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <rect x="2" y="7" width="20" height="13" rx="2" stroke="#0ea5e9" strokeWidth="1.5" />
+        <path d="M16 7V5a4 4 0 00-8 0v2" stroke="#0ea5e9" strokeWidth="1.5" strokeLinecap="round" />
+        <path d="M12 11v4M10 13h4" stroke="#0ea5e9" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
+    component: TrackingApp,
+  },
+  {
+    id: "phoneinfo",
+    name: "手机归属地",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <rect x="5" y="2" width="14" height="20" rx="3" stroke="#10b981" strokeWidth="1.5" />
+        <circle cx="12" cy="18" r="1" fill="#10b981" />
+        <path d="M9 6h6" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    ),
+    component: PhoneInfoApp,
+  },
+  {
+    id: "worldtime",
+    name: "世界时间",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="#0ea5e9" strokeWidth="1.5" />
+        <path d="M12 3c-3 4-3 8 0 9s3 5 0 9" stroke="#0ea5e9" strokeWidth="1.5" />
+        <path d="M3 12h18" stroke="#0ea5e9" strokeWidth="1.5" />
+        <path d="M4.5 7.5h15M4.5 16.5h15" stroke="#0ea5e9" strokeWidth="1" opacity="0.4" />
+      </svg>
+    ),
+    component: WorldTimeApp,
+  },
+  {
+    id: "clock",
+    name: "时钟",
+    icon: (
+      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9" stroke="#8b5cf6" strokeWidth="1.5" />
+        <path d="M12 7v5l3 3" stroke="#8b5cf6" strokeWidth="1.5" strokeLinecap="round" />
+        <circle cx="12" cy="12" r="1" fill="#8b5cf6" />
+      </svg>
+    ),
+    component: ClockApp,
   },
 ];
 
 const STORAGE_KEY = "toolbox-order";
+const APP_KEY = "toolbox-active-app";
 
 function loadOrder(): string[] {
   try {
@@ -404,6 +663,14 @@ export default function Toolbox() {
     }
   }, []);
 
+  useEffect(() => {
+    if (activeApp === "games") {
+      localStorage.removeItem(APP_KEY);
+    } else if (activeApp) {
+      localStorage.setItem(APP_KEY, activeApp);
+    }
+  }, [activeApp]);
+
   // Update btnRect on open, drag, resize
   const updateBtnRect = useCallback(() => {
     if (!btnRef.current) return;
@@ -437,6 +704,12 @@ export default function Toolbox() {
     if (isOpen) document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
+
+  useEffect(() => {
+    const handleClose = () => { setIsOpen(false); setActiveApp(null); };
+    window.addEventListener("close-toolbox", handleClose);
+    return () => window.removeEventListener("close-toolbox", handleClose);
+  }, []);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -513,7 +786,7 @@ export default function Toolbox() {
                 <div className="flex items-center gap-2 px-4 py-2 border-b border-slate-100 dark:border-slate-800 shrink-0">
                   <button
                     type="button"
-                    onClick={() => setActiveApp(null)}
+                    onClick={() => { setActiveApp(null); localStorage.removeItem(APP_KEY); }}
                     title="返回"
                     className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400"
                   >
@@ -558,15 +831,15 @@ export default function Toolbox() {
                 <ResizeHandle
                   dir="bottom-right"
                   onResize={(dw, dh) => {
-                    setPanelW((w) => Math.min(Math.max(w + dw, 200), 600));
-                    setPanelH((h) => Math.min(Math.max(h + dh, 300), 800));
+                    setPanelW((w) => Math.min(Math.max(w + dw, 200), window.innerWidth - 32));
+                    setPanelH((h) => Math.min(Math.max(h + dh, 300), window.innerHeight - 32));
                   }}
                 />
                 <ResizeHandle
                   dir="top-left"
                   onResize={(dw, dh) => {
-                    const newW = Math.min(Math.max(panelW + dw, 200), 600);
-                    const newH = Math.min(Math.max(panelH + dh, 300), 800);
+                    const newW = Math.min(Math.max(panelW + dw, 200), window.innerWidth - 32);
+                    const newH = Math.min(Math.max(panelH + dh, 300), window.innerHeight - 32);
                     const actualDw = newW - panelW;
                     const actualDh = newH - panelH;
                     setPanelW(newW);
@@ -577,7 +850,7 @@ export default function Toolbox() {
                 <ResizeHandle
                   dir="top-right"
                   onResize={(_dw, dh) => {
-                    const newH = Math.min(Math.max(panelH + dh, 300), 800);
+                    const newH = Math.min(Math.max(panelH + dh, 300), window.innerHeight - 32);
                     const actualDh = newH - panelH;
                     setPanelH(newH);
                     setResizeOffset((p) => ({ x: p.x, y: p.y - actualDh }));
@@ -586,7 +859,7 @@ export default function Toolbox() {
                 <ResizeHandle
                   dir="bottom-left"
                   onResize={(dw, _dh) => {
-                    const newW = Math.min(Math.max(panelW + dw, 200), 600);
+                    const newW = Math.min(Math.max(panelW + dw, 200), window.innerWidth - 32);
                     const actualDw = newW - panelW;
                     setPanelW(newW);
                     setResizeOffset((p) => ({ x: p.x - actualDw, y: p.y }));
@@ -631,6 +904,8 @@ export default function Toolbox() {
               setResizeOffset({ x: 0, y: 0 });
               setPanelW(288);
               setPanelH(560);
+              const saved = localStorage.getItem(APP_KEY);
+              if (saved && saved !== "games") setActiveApp(saved);
               setIsOpen(true);
             }
           }}

@@ -141,9 +141,15 @@ async function loadPhotos(albumId: number) {
   }
 }
 
-/** 压缩图片：最大 2000px 宽/高，质量 0.8 */
+/** 压缩/缩放图片：最大 2000px 宽/高，保持原格式（GIF 跳过压缩） */
 function compressImage(file: File): Promise<File> {
-  return new Promise((resolve, reject) => {
+  // GIF 不压缩，保留动画
+  if (file.type === "image/gif") return Promise.resolve(file);
+
+  const outputType = file.type === "image/png" ? "image/png" : "image/jpeg";
+  const quality = outputType === "image/png" ? undefined : 0.8;
+
+  return new Promise(resolve => {
     const reader = new FileReader();
     reader.onload = () => {
       const img = new Image();
@@ -160,14 +166,21 @@ function compressImage(file: File): Promise<File> {
         canvas.height = height;
         const ctx = canvas.getContext("2d");
         if (!ctx) return resolve(file);
+        // PNG 保留透明通道：不填充背景
+        if (outputType !== "image/png") {
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, width, height);
+        }
         ctx.drawImage(img, 0, 0, width, height);
         canvas.toBlob(
           blob => {
             if (!blob) return resolve(file);
-            resolve(new File([blob], file.name, { type: "image/jpeg" }));
+            const ext = outputType === "image/png" ? "png" : "jpg";
+            const name = file.name.replace(/\.[^.]+$/, `.${ext}`);
+            resolve(new File([blob], name, { type: outputType }));
           },
-          "image/jpeg",
-          0.8
+          outputType,
+          quality
         );
       };
       img.onerror = () => resolve(file);
@@ -360,7 +373,7 @@ onMounted(() => onSearch());
             {{ uploading ? "上传中..." : "将图片拖到此处，或点击上传" }}
           </span>
           <span class="text-xs text-gray-400 mt-1">
-            支持 jpg / png / webp / gif，最大 10MB
+            支持 jpg / png / webp / gif（含动图），最大 10MB
           </span>
         </div>
       </el-upload>

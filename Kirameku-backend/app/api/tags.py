@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlmodel import Session
 
-from app.database import get_session
+from app.deps import get_session
 from app.schemas import TagCreate, TagUpdate, TagOut
 from app.services import tag_service
-from app.utils.auth import get_current_user
+from app.deps import get_current_user
 
 router = APIRouter(prefix="/api/tags", tags=["标签"])
 

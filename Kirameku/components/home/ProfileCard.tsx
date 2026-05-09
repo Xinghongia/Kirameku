@@ -27,12 +27,12 @@ export default function ProfileCard() {
 
   return (
     <div
-      className="rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl p-8 flex flex-col justify-between transition-all duration-700 group relative overflow-hidden w-full h-full min-h-[280px]"
+      className="rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl p-5 md:p-8 flex flex-col justify-between transition-all duration-700 group relative overflow-hidden w-full h-full min-h-[200px] md:min-h-[280px]"
     >
       <div className="flex items-start justify-between relative z-10">
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 md:gap-6">
           <div className="flex-shrink-0">
-            <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-sky-400 via-indigo-400 to-purple-400 p-[3px] shadow-lg transition-all duration-500 hover:shadow-xl hover:scale-110 hover:rotate-6 cursor-pointer">
+            <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-gradient-to-tr from-sky-400 via-indigo-400 to-purple-400 p-[3px] shadow-lg transition-all duration-500 hover:shadow-xl hover:scale-110 hover:rotate-6 cursor-pointer">
               <img
                 src={siteConfig.avatarUrl}
                 alt="avatar"
@@ -41,17 +41,17 @@ export default function ProfileCard() {
             </div>
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white mb-2 tracking-wider transition-colors duration-700">
+            <h1 className="text-xl md:text-3xl font-bold text-slate-900 dark:text-white mb-1 md:mb-2 tracking-wider transition-colors duration-700">
               {siteConfig.authorName}
             </h1>
-            <p className="text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-md transition-colors duration-700">
+            <p className="text-sm md:text-base text-slate-700 dark:text-slate-300 font-medium leading-relaxed max-w-md transition-colors duration-700">
               {siteConfig.bio}
             </p>
           </div>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row items-end md:items-center justify-between mt-8 gap-6 relative z-10">
+      <div className="flex flex-col md:flex-row items-end md:items-center justify-between mt-4 md:mt-8 gap-4 md:gap-6 relative z-10">
         <div className="flex gap-6 w-full md:w-auto justify-around md:justify-start">
           <StatItem
             count={postCount}
@@ -106,7 +106,7 @@ function StatItem({
   return (
     <div className="text-center group/stat">
       <div
-        className={`text-2xl font-black ${color} transition-transform group-hover/stat:scale-110`}
+        className={`text-xl md:text-2xl font-black ${color} transition-transform group-hover/stat:scale-110`}
       >
         {count}
       </div>

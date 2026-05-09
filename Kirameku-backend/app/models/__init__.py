@@ -1,4 +1,5 @@
 from app.models.user import User
+from app.models.github_user import GitHubUser
 from app.models.post import Post, Category, Tag, PostTag
 from app.models.comment import Comment
 from app.models.message import Message
@@ -10,6 +11,7 @@ from app.models.site_config import SiteConfig
 
 __all__ = [
     "User",
+    "GitHubUser",
     "Post", "Category", "Tag", "PostTag",
     "Comment",
     "Message",

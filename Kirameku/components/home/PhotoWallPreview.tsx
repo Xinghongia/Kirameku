@@ -21,9 +21,11 @@ export default function PhotoWallPreview() {
   const isDragging = useRef(false);
 
   useEffect(() => {
+    const isMobile = window.innerWidth < 768;
+    const targetTitle = isMobile ? "2" : "1";
     getAlbums()
       .then((albums) => {
-        const target = albums.find((a) => a.title === "1");
+        const target = albums.find((a) => a.title === targetTitle);
         if (!target) return;
         return getAlbumPhotos(target.id);
       })
@@ -86,7 +88,7 @@ export default function PhotoWallPreview() {
     return (
       <div
         onClick={handleClick}
-        className="rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl overflow-hidden min-h-[420px] h-full flex flex-col items-center justify-center gap-3 text-slate-400 dark:text-slate-500 cursor-pointer"
+        className="rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl overflow-hidden min-h-[240px] md:min-h-[420px] h-full flex flex-col items-center justify-center gap-3 text-slate-400 dark:text-slate-500 cursor-pointer"
       >
         <svg
           className="w-12 h-12 opacity-40"
@@ -109,7 +111,7 @@ export default function PhotoWallPreview() {
   return (
     <div
       onClick={handleClick}
-      className="rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl overflow-hidden relative group min-h-[420px] h-full flex flex-col select-none cursor-pointer touch-none"
+      className="rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl overflow-hidden relative group min-h-[240px] md:min-h-[420px] h-full flex flex-col select-none cursor-pointer touch-none"
       onTouchStart={(e) => handlePointerDown(e.touches[0].clientX)}
       onTouchMove={(e) => handlePointerMove(e.touches[0].clientX)}
       onTouchEnd={handlePointerUp}

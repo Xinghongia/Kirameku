@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import PortalOverlay from "./PortalOverlay";
 
 const BASE = "https://uapis.cn/api/v1/random/image";
 
@@ -156,12 +157,14 @@ export default function RandomImageApp() {
       </button>
       {/* Lightbox */}
       {zoomed && imgUrl && (
-        <div
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center cursor-zoom-out"
-          onClick={() => setZoomed(false)}
-        >
-          <img src={imgUrl} alt="随机图片" className="max-w-[95vw] max-h-[95vh] object-contain rounded-lg shadow-2xl" />
-        </div>
+        <PortalOverlay>
+          <div
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center cursor-zoom-out"
+            onClick={() => setZoomed(false)}
+          >
+            <img src={imgUrl} alt="随机图片" className="max-w-[95vw] max-h-[95vh] object-contain rounded-lg shadow-2xl" />
+          </div>
+        </PortalOverlay>
       )}
     </div>
   );

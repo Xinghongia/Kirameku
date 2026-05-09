@@ -5,7 +5,7 @@ import oss2
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
 from PIL import Image
 
-from app.utils.auth import get_current_user
+from app.deps import get_current_user
 from app.config import (
     OSS_ACCESS_KEY_ID,
     OSS_ACCESS_KEY_SECRET,

@@ -8,6 +8,8 @@ import { MusicProvider } from "@/components/providers/MusicProvider";
 import BackgroundRenderer from "@/components/layout/BackgroundRenderer";
 import Navbar from "@/components/layout/Navbar";
 import ClientWidgets from "@/components/layout/ClientWidgets";
+import ClickEffect from "@/components/ui/ClickEffect";
+import WelcomeScreen from "@/components/layout/WelcomeScreen";
 import { siteConfig } from "@/siteConfig";
 
 const geistSans = Geist({
@@ -44,10 +46,12 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans">
         <ThemeProvider>
+          <WelcomeScreen />
           <BackgroundProvider>
             <MusicProvider>
               <ToastProvider>
                 <BackgroundRenderer />
+                <ClickEffect />
                 <Navbar />
                 <main className="flex-1 pt-16">
                   {children}

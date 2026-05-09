@@ -61,21 +61,21 @@ export default function PostsPage() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
       {/* 页头 */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="mb-10"
+        className="mb-6 md:mb-10"
       >
-        <div className="flex items-center gap-3 mb-2">
-          <BookOpen className="w-7 h-7 text-sky-500" />
-          <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">
+        <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
+          <BookOpen className="w-5 h-5 md:w-7 md:h-7 text-sky-500" />
+          <h1 className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100">
             文章
           </h1>
         </div>
-        <p className="text-slate-500 dark:text-slate-400 ml-10">
+        <p className="text-sm md:text-base text-slate-500 dark:text-slate-400 ml-7 md:ml-10">
           记录技术探索、学术研究与生活感悟
         </p>
       </motion.div>
@@ -85,7 +85,7 @@ export default function PostsPage() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, delay: 0.15 }}
-        className="mb-8 flex flex-wrap gap-2"
+        className="mb-5 md:mb-8 flex flex-wrap gap-1.5 md:gap-2"
       >
         <FilterTab
           label="全部"
@@ -122,7 +122,7 @@ export default function PostsPage() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6"
           >
             {posts.map((post, i) => (
               <div key={post.id}>
@@ -143,7 +143,7 @@ export default function PostsPage() {
           <button
             type="button"
             onClick={handleLoadMore}
-            className="px-8 py-3 rounded-2xl bg-white/10 dark:bg-white/[0.05] backdrop-blur-xl border border-white/20 text-slate-700 dark:text-slate-300 hover:bg-white/20 dark:hover:bg-white/[0.1] transition-all duration-300 hover:-translate-y-0.5"
+            className="px-5 py-2 md:px-8 md:py-3 rounded-2xl bg-white/10 dark:bg-white/[0.05] backdrop-blur-xl border border-white/20 text-sm md:text-base text-slate-700 dark:text-slate-300 hover:bg-white/20 dark:hover:bg-white/[0.1] transition-all duration-300 hover:-translate-y-0.5"
           >
             加载更多
           </button>
@@ -177,7 +177,7 @@ function FilterTab({
     <button
       type="button"
       onClick={onClick}
-      className={`relative px-5 py-2 rounded-2xl text-sm font-medium transition-all duration-300 ${
+      className={`relative px-3 py-1.5 md:px-5 md:py-2 rounded-2xl text-xs md:text-sm font-medium transition-all duration-300 ${
         active
           ? "text-white shadow-lg shadow-sky-500/20"
           : "text-slate-600 dark:text-slate-400 bg-white/10 dark:bg-white/[0.05] backdrop-blur-xl border border-white/20 hover:bg-white/20 dark:hover:bg-white/[0.1]"

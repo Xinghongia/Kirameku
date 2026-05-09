@@ -96,25 +96,39 @@ CREATE INDEX IF NOT EXISTS idx_comment_post ON comment(post_id);
 CREATE INDEX IF NOT EXISTS idx_comment_status ON comment(status);
 
 -- ============================================
--- 7. Message（留言板）
+-- 7. GitHubUser（GitHub 登录用户）
 -- ============================================
-CREATE TABLE IF NOT EXISTS message (
+CREATE TABLE IF NOT EXISTS github_user (
     id            SERIAL PRIMARY KEY,
-    nickname      VARCHAR(50)  NOT NULL,
-    email         VARCHAR(100) DEFAULT '',
-    website       VARCHAR(200) DEFAULT '',
-    content       TEXT         NOT NULL,
+    github_id     INTEGER      UNIQUE NOT NULL,
+    login         VARCHAR(100) NOT NULL,
     avatar        VARCHAR(500) DEFAULT '',
-    ip            VARCHAR(45)  DEFAULT '',
-    status        VARCHAR(20)  DEFAULT 'pending',
-    likes         INTEGER      DEFAULT 0,
+    bio           VARCHAR(500) DEFAULT '',
     created_at    TIMESTAMP    DEFAULT NOW()
 );
 
-CREATE INDEX IF NOT EXISTS idx_message_status ON message(status);
+CREATE INDEX IF NOT EXISTS idx_github_user_id ON github_user(github_id);
 
 -- ============================================
--- 8. Chatter（说说/微语）
+-- 8. Message（留言板/杂谈）
+-- ============================================
+CREATE TABLE IF NOT EXISTS message (
+    id              SERIAL PRIMARY KEY,
+    github_user_id  INTEGER      REFERENCES github_user(id) ON DELETE SET NULL,
+    parent_id       INTEGER      REFERENCES message(id) ON DELETE CASCADE,
+    content         TEXT         NOT NULL,
+    ip              VARCHAR(45)  DEFAULT '',
+    status          VARCHAR(20)  DEFAULT 'approved',
+    likes           INTEGER      DEFAULT 0,
+    created_at      TIMESTAMP    DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_message_status ON message(status);
+CREATE INDEX IF NOT EXISTS idx_message_parent ON message(parent_id);
+CREATE INDEX IF NOT EXISTS idx_message_github_user ON message(github_user_id);
+
+-- ============================================
+-- 9. Chatter（说说/微语）
 -- ============================================
 CREATE TABLE IF NOT EXISTS chatter (
     id              SERIAL PRIMARY KEY,
@@ -131,7 +145,7 @@ CREATE TABLE IF NOT EXISTS chatter (
 CREATE INDEX IF NOT EXISTS idx_chatter_status ON chatter(status);
 
 -- ============================================
--- 9. ChatterComment（说说评论）
+-- 10. ChatterComment（说说评论）
 -- ============================================
 CREATE TABLE IF NOT EXISTS chatter_comment (
     id            SERIAL PRIMARY KEY,
@@ -150,7 +164,7 @@ CREATE INDEX IF NOT EXISTS idx_chatter_comment_chatter ON chatter_comment(chatte
 CREATE INDEX IF NOT EXISTS idx_chatter_comment_status ON chatter_comment(status);
 
 -- ============================================
--- 10. Album（相册）
+-- 11. Album（相册）
 -- ============================================
 CREATE TABLE IF NOT EXISTS album (
     id            SERIAL PRIMARY KEY,
@@ -164,7 +178,7 @@ CREATE TABLE IF NOT EXISTS album (
 );
 
 -- ============================================
--- 11. Photo（照片）
+-- 12. Photo（照片）
 -- ============================================
 CREATE TABLE IF NOT EXISTS photo (
     id            SERIAL PRIMARY KEY,
@@ -179,7 +193,7 @@ CREATE TABLE IF NOT EXISTS photo (
 CREATE INDEX IF NOT EXISTS idx_photo_album ON photo(album_id);
 
 -- ============================================
--- 12. Project（项目展示）
+-- 13. Project（项目展示）
 -- ============================================
 CREATE TABLE IF NOT EXISTS project (
     id               SERIAL PRIMARY KEY,
@@ -202,7 +216,7 @@ CREATE TABLE IF NOT EXISTS project (
 );
 
 -- ============================================
--- 13. FriendLink（友情链接）
+-- 14. FriendLink（友情链接）
 -- ============================================
 CREATE TABLE IF NOT EXISTS friend_link (
     id            SERIAL PRIMARY KEY,
@@ -216,7 +230,7 @@ CREATE TABLE IF NOT EXISTS friend_link (
 );
 
 -- ============================================
--- 14. SiteConfig（站点配置）
+-- 15. SiteConfig（站点配置）
 -- ============================================
 CREATE TABLE IF NOT EXISTS site_config (
     id            SERIAL PRIMARY KEY,

@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, Query, Request
 from sqlmodel import Session
 
-from app.database import get_session
+from app.deps import get_session
 from app.schemas import MessageCreate, MessageOut, MessageAdminUpdate
 from app.services import message_service
-from app.utils.auth import get_current_user
+from app.deps import get_current_user
+from app.api.github_auth import _get_github_user, get_github_user_optional
 
 router = APIRouter(prefix="/api/messages", tags=["留言板"])
 
@@ -20,14 +21,40 @@ def list_messages(
     return message_service.get_messages(session, "approved", page, size)
 
 
-@router.post("", response_model=MessageOut)
+@router.get("/count")
+def message_count(session: Session = Depends(get_session)):
+    return {"count": message_service.get_message_count(session, "approved")}
+
+
+@router.post("", response_model=dict)
 def create_message(
     data: MessageCreate,
     request: Request,
     session: Session = Depends(get_session),
 ):
-    ip = request.client.host if request.client else ""
-    return message_service.create_message(session, data, ip)
+    user = get_github_user_optional(request, session)
+    ip = request.headers.get("x-forwarded-for", "").split(",")[0].strip()
+    if not ip:
+        ip = request.headers.get("x-real-ip", "")
+    if not ip:
+        ip = request.client.host if request.client else ""
+    return message_service.create_message(session, data, user, ip)
+
+
+@router.post("/{msg_id}/like")
+def like_message(
+    msg_id: int,
+    session: Session = Depends(get_session),
+):
+    return message_service.toggle_like(session, msg_id, unlike=False)
+
+
+@router.post("/{msg_id}/unlike")
+def unlike_message(
+    msg_id: int,
+    session: Session = Depends(get_session),
+):
+    return message_service.toggle_like(session, msg_id, unlike=True)
 
 
 # ---- 管理接口 ----

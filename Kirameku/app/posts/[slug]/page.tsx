@@ -53,16 +53,16 @@ export default function PostDetailPage() {
 
   if (error || !post) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-12">
+      <div className="max-w-4xl mx-auto px-4 py-6 md:py-12">
         <Link
           href="/posts"
-          className="inline-flex items-center gap-2 text-slate-500 hover:text-sky-500 transition-colors mb-8"
+          className="inline-flex items-center gap-2 text-sm md:text-base text-slate-500 hover:text-sky-500 transition-colors mb-4 md:mb-8"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-3.5 h-3.5 md:w-4 md:h-4" />
           返回文章列表
         </Link>
-        <div className="flex flex-col items-center justify-center py-32 text-slate-400">
-          <p className="text-lg">文章不存在或已被删除</p>
+        <div className="flex flex-col items-center justify-center py-20 md:py-32 text-slate-400">
+          <p className="text-base md:text-lg">文章不存在或已被删除</p>
         </div>
       </div>
     );
@@ -79,7 +79,7 @@ export default function PostDetailPage() {
     : "";
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
       {/* 返回按钮 */}
       <motion.div
         initial={{ opacity: 0, x: -10 }}
@@ -88,9 +88,9 @@ export default function PostDetailPage() {
       >
         <Link
           href="/posts"
-          className="inline-flex items-center gap-2 text-slate-500 hover:text-sky-500 transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-sm md:text-base text-slate-500 hover:text-sky-500 transition-colors mb-4 md:mb-8"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-3.5 h-3.5 md:w-4 md:h-4" />
           返回文章列表
         </Link>
       </motion.div>
@@ -104,7 +104,7 @@ export default function PostDetailPage() {
       >
         {/* 封面图 */}
         {post.cover && (
-          <div className="relative w-full h-56 md:h-72 overflow-hidden">
+          <div className="relative w-full h-40 sm:h-56 md:h-72 overflow-hidden">
             <Image
               src={post.cover}
               alt={post.title}
@@ -116,37 +116,37 @@ export default function PostDetailPage() {
           </div>
         )}
 
-        <div className="px-6 md:px-12 py-8 md:py-10">
+        <div className="px-4 sm:px-6 md:px-12 py-5 sm:py-8 md:py-10">
           {/* 标题 */}
-          <h1 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white leading-tight mb-4">
+          <h1 className="text-xl sm:text-2xl md:text-4xl font-bold text-slate-900 dark:text-white leading-tight mb-3 md:mb-4">
             {post.title}
           </h1>
 
           {/* 描述 */}
           {post.description && (
-            <p className="text-slate-600 dark:text-slate-300 text-base md:text-lg mb-6 leading-relaxed">
+            <p className="text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-300 mb-4 sm:mb-6 md:mb-6 leading-relaxed">
               {post.description}
             </p>
           )}
 
           {/* 元信息 + 标签 */}
-          <div className="flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-400 mb-8 pb-8 border-b border-slate-200/60 dark:border-white/10">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-5 pb-5 sm:mb-8 sm:pb-8 border-b border-slate-200/60 dark:border-white/10">
             {dateStr && (
-              <span className="flex items-center gap-1.5">
-                <Calendar className="w-4 h-4" />
+              <span className="flex items-center gap-1 sm:gap-1.5">
+                <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                 {dateStr}
               </span>
             )}
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-4 h-4" />
+            <span className="flex items-center gap-1 sm:gap-1.5">
+              <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               {post.reading_time} 分钟阅读
             </span>
-            <span className="flex items-center gap-1.5">
-              <Eye className="w-4 h-4" />
+            <span className="flex items-center gap-1 sm:gap-1.5">
+              <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               {post.views} 次浏览
             </span>
-            <span className="flex items-center gap-1.5">
-              <Heart className="w-4 h-4" />
+            <span className="flex items-center gap-1 sm:gap-1.5">
+              <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               {post.likes} 个点赞
             </span>
           </div>
@@ -255,7 +255,7 @@ export default function PostDetailPage() {
               }
             `}</style>
             <div
-              className="post-content prose prose-slate dark:prose-invert prose-lg max-w-none text-slate-800 dark:text-slate-200 leading-relaxed"
+              className="post-content prose prose-sm sm:prose-base md:prose-lg dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: marked.parse(post.content) as string }}
             />
           </div>

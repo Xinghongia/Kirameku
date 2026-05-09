@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, Query
 from sqlmodel import Session
 
-from app.database import get_session
+from app.deps import get_session
 from app.schemas import PostCreate, PostUpdate, PostOut, PostDetail
 from app.services import post_service
-from app.utils.auth import get_current_user
+from app.deps import get_current_user
 
 router = APIRouter(prefix="/api/posts", tags=["文章"])
 

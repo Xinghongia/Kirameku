@@ -117,28 +117,28 @@ export default function MomentsPage() {
 
   if (loading) {
     return (
-      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
+      <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-12">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="mb-12"
+          className="mb-6 md:mb-12"
         >
-          <div className="flex items-center gap-3 mb-2">
-            <MessageSquare className="w-7 h-7 text-sky-500" />
-            <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">
+          <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
+            <MessageSquare className="w-5 h-5 md:w-7 md:h-7 text-sky-500" />
+            <h1 className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100">
               说说
             </h1>
           </div>
-          <p className="text-slate-600 dark:text-slate-300 ml-10">
+          <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 ml-7 md:ml-10">
             记录生活中的小确幸
           </p>
         </motion.div>
-        <div className="space-y-6">
+        <div className="space-y-3 md:space-y-6">
           {[1, 2, 3].map((i) => (
             <div
               key={i}
-              className="h-24 rounded-2xl bg-white/40 dark:bg-slate-800/40 animate-pulse"
+              className="h-20 md:h-24 rounded-2xl bg-white/40 dark:bg-slate-800/40 animate-pulse"
             />
           ))}
         </div>
@@ -147,21 +147,21 @@ export default function MomentsPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
+    <div className="max-w-2xl mx-auto px-4 sm:px-6 py-6 md:py-12">
       {/* 页头 */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="mb-12"
+        className="mb-6 md:mb-12"
       >
-        <div className="flex items-center gap-3 mb-2">
-          <MessageSquare className="w-7 h-7 text-sky-500" />
-          <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100">
+        <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2">
+          <MessageSquare className="w-5 h-5 md:w-7 md:h-7 text-sky-500" />
+          <h1 className="text-xl md:text-3xl font-bold text-slate-800 dark:text-slate-100">
             说说
           </h1>
         </div>
-        <p className="text-slate-600 dark:text-slate-300 ml-10">
+        <p className="text-sm md:text-base text-slate-600 dark:text-slate-300 ml-7 md:ml-10">
           记录生活中的小确幸
         </p>
       </motion.div>
@@ -173,18 +173,18 @@ export default function MomentsPage() {
           animate={{ opacity: 1 }}
           type="button"
           onClick={() => setOnlyViewId(null)}
-          className="flex items-center gap-2 text-sm text-slate-500 hover:text-sky-500 transition-colors mb-8"
+          className="flex items-center gap-1.5 text-xs md:text-sm text-slate-500 hover:text-sky-500 transition-colors mb-4 md:mb-8"
         >
-          <ChevronLeft className="w-4 h-4" />
+          <ChevronLeft className="w-3.5 h-3.5 md:w-4 md:h-4" />
           返回全部
         </motion.button>
       )}
 
       {/* 空状态 */}
       {!loading && moments.length === 0 && (
-        <div className="text-center py-20 text-slate-400">
-          <MessageSquare className="w-12 h-12 mx-auto mb-4 opacity-40" />
-          <p>暂无说说</p>
+        <div className="text-center py-12 md:py-20 text-slate-400">
+          <MessageSquare className="w-8 h-8 md:w-12 md:h-12 mx-auto mb-3 md:mb-4 opacity-40" />
+          <p className="text-sm md:text-base">暂无说说</p>
         </div>
       )}
 
@@ -195,14 +195,14 @@ export default function MomentsPage() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: groupIdx * 0.1 }}
-          className="mb-14 last:mb-0"
+          className="mb-8 md:mb-14 last:mb-0"
         >
           {/* 日期标签 */}
-          <div className="flex items-center gap-3 mb-5">
-            <span className="text-sm font-bold text-slate-700 dark:text-slate-300">
+          <div className="flex items-center gap-2 md:gap-3 mb-3 md:mb-5">
+            <span className="text-xs md:text-sm font-bold text-slate-700 dark:text-slate-300">
               {group.label}
             </span>
-            <span className="text-xs text-slate-600 dark:text-slate-400">
+            <span className="text-[10px] md:text-xs text-slate-600 dark:text-slate-400">
               {group.moments.length} 条
             </span>
             <div className="flex-1 h-px bg-gradient-to-r from-slate-200 dark:from-slate-700 to-transparent" />
@@ -214,13 +214,13 @@ export default function MomentsPage() {
             style={{
               minHeight:
                 group.moments.length > 1
-                  ? 130 + (group.moments.length - 1) * 24
+                  ? 100 + (group.moments.length - 1) * 18
                   : "auto",
             }}
           >
             {group.moments.map((moment, i) => {
               const rot = rotations[i % rotations.length];
-              const offsetX = i % 2 === 0 ? -6 : 6;
+              const offsetX = i % 2 === 0 ? -4 : 4;
               const isExpanded = expandedId === moment.id;
               const hasImages = moment.images && moment.images.length > 0;
 
@@ -267,28 +267,28 @@ export default function MomentsPage() {
                   style={{
                     zIndex: isExpanded ? 50 : group.moments.length - i,
                     ...(group.moments.length > 1 && !onlyViewId
-                      ? { top: i * 24 }
+                      ? { top: i * 18 }
                       : {}),
                   }}
                 >
                   <div className="rounded-2xl bg-white/50 dark:bg-slate-800/60 backdrop-blur-xl border border-white/30 dark:border-white/10 shadow-lg overflow-hidden transition-shadow duration-300 hover:shadow-xl">
                     {/* 叠放态：简洁预览 */}
                     {!isExpanded && !onlyViewId && (
-                      <div className="px-5 py-4">
-                        <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs text-slate-400">
+                      <div className="px-3 py-3 md:px-5 md:py-4">
+                        <div className="flex items-center gap-1.5 md:gap-2 mb-1.5 md:mb-2">
+                          <span className="text-[10px] md:text-xs text-slate-400">
                             {relativeTime(moment.created_at)}
                           </span>
                           {moment.mood && (
-                            <span className="text-xs">{moment.mood}</span>
+                            <span className="text-[10px] md:text-xs">{moment.mood}</span>
                           )}
                           {hasImages && (
-                            <span className="text-xs text-slate-400">
+                            <span className="text-[10px] md:text-xs text-slate-400">
                               📷
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-slate-700 dark:text-slate-300 line-clamp-2 leading-relaxed">
+                        <p className="text-xs md:text-sm text-slate-700 dark:text-slate-300 line-clamp-2 leading-relaxed">
                           {moment.content}
                         </p>
                       </div>
@@ -300,41 +300,41 @@ export default function MomentsPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3 }}
-                        className="p-5"
+                        className="p-3 md:p-5"
                       >
                         {/* 头部 */}
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-between mb-2 md:mb-3">
+                          <div className="flex items-center gap-1.5 md:gap-2">
                             <Image
                               src="/images/hong.jpg"
                               alt="avatar"
-                              width={28}
-                              height={28}
-                              className="rounded-full object-cover"
+                              width={24}
+                              height={24}
+                              className="rounded-full object-cover md:w-7 md:h-7"
                             />
-                            <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
+                            <span className="text-xs md:text-sm font-semibold text-slate-800 dark:text-slate-200">
                               {siteConfig.authorName}
                             </span>
-                            <span className="text-xs text-slate-400">
+                            <span className="text-[10px] md:text-xs text-slate-400">
                               {relativeTime(moment.created_at)}
                             </span>
                           </div>
                           {moment.mood && (
-                            <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100/80 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400">
+                            <span className="text-[10px] md:text-xs px-1.5 md:px-2 py-0.5 rounded-full bg-slate-100/80 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400">
                               {moment.mood}
                             </span>
                           )}
                         </div>
 
                         {/* 内容 */}
-                        <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed mb-4 whitespace-pre-wrap">
+                        <p className="text-xs md:text-sm text-slate-700 dark:text-slate-300 leading-relaxed mb-3 md:mb-4 whitespace-pre-wrap">
                           {moment.content}
                         </p>
 
                         {/* 图片网格 */}
                         {hasImages && (
                           <div
-                            className={`grid gap-2 mb-4 ${
+                            className={`grid gap-1.5 md:gap-2 mb-3 md:mb-4 ${
                               moment.images.length <= 2
                                 ? "grid-cols-2"
                                 : "grid-cols-3"
@@ -356,7 +356,7 @@ export default function MomentsPage() {
                                     e.stopPropagation();
                                     setLightbox({ photos, index: idx });
                                   }}
-                                  className="relative rounded-xl overflow-hidden cursor-pointer group/img aspect-square"
+                                  className="relative rounded-lg md:rounded-xl overflow-hidden cursor-pointer group/img aspect-square"
                                 >
                                   <Image
                                     src={img}
@@ -372,17 +372,17 @@ export default function MomentsPage() {
                         )}
 
                         {/* 底部操作 */}
-                        <div className="flex items-center justify-between pt-3 border-t border-slate-200/50 dark:border-white/5">
+                        <div className="flex items-center justify-between pt-2 md:pt-3 border-t border-slate-200/50 dark:border-white/5">
                           <button
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
                               toggleLike(moment.id);
                             }}
-                            className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-pink-500 transition-colors"
+                            className="flex items-center gap-1 md:gap-1.5 text-[10px] md:text-xs text-slate-400 hover:text-pink-500 transition-colors"
                           >
                             <Heart
-                              className={`w-4 h-4 transition-all duration-300 ${
+                              className={`w-3.5 h-3.5 md:w-4 md:h-4 transition-all duration-300 ${
                                 likedIds.has(moment.id)
                                   ? "fill-pink-500 text-pink-500 scale-110"
                                   : ""
@@ -404,7 +404,7 @@ export default function MomentsPage() {
                                   : moment.id
                               );
                             }}
-                            className="text-xs px-3 py-1 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 hover:bg-sky-500/20 transition-colors"
+                            className="text-[10px] md:text-xs px-2 md:px-3 py-0.5 md:py-1 rounded-full bg-sky-500/10 text-sky-600 dark:text-sky-400 hover:bg-sky-500/20 transition-colors"
                           >
                             {onlyViewId === moment.id
                               ? "返回全部"

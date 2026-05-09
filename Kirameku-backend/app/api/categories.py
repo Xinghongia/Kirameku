@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends
 from sqlmodel import Session
 
-from app.database import get_session
+from app.deps import get_session
 from app.schemas import CategoryCreate, CategoryUpdate, CategoryOut
 from app.services import category_service
-from app.utils.auth import get_current_user
+from app.deps import get_current_user
 
 router = APIRouter(prefix="/api/categories", tags=["分类"])
 

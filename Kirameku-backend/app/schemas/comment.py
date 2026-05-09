@@ -28,23 +28,30 @@ class CommentAdminUpdate(BaseModel):
     status: str  # approved / rejected
 
 
-# 留言板
+# 留言板/杂谈
 class MessageCreate(BaseModel):
-    nickname: str
-    email: str = ""
-    website: str = ""
     content: str
+    parent_id: int | None = None
+
+
+class GitHubUserOut(BaseModel):
+    id: int
+    login: str
+    avatar: str
+    bio: str
 
 
 class MessageOut(BaseModel):
     id: int
-    nickname: str
-    website: str
+    github_user_id: int | None
+    parent_id: int | None
     content: str
-    avatar: str
+    ip: str = ""
     status: str
     likes: int
     created_at: datetime
+    github_user: GitHubUserOut | None = None
+    replies: list["MessageOut"] = []
 
 
 class MessageAdminUpdate(BaseModel):

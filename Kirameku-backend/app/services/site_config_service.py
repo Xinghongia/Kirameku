@@ -18,6 +18,42 @@ def get_all_config(session: Session) -> dict[str, any]:
     return result
 
 
+def get_all_config_list(session: Session) -> list[dict]:
+    """返回所有配置的完整列表（含 id、description、updated_at）。"""
+    rows = list(session.exec(select(SiteConfig).order_by(SiteConfig.id)).all())
+    return [
+        {
+            "id": r.id,
+            "key": r.key,
+            "value": r.value,
+            "description": r.description or "",
+            "updated_at": r.updated_at.isoformat() if r.updated_at else "",
+        }
+        for r in rows
+    ]
+
+
+def create_config(session: Session, key: str, value: str, description: str = "") -> SiteConfig:
+    """新建配置项。"""
+    existing = session.exec(select(SiteConfig).where(SiteConfig.key == key)).first()
+    if existing:
+        raise HTTPException(400, f"配置 {key} 已存在")
+    row = SiteConfig(key=key, value=value, description=description)
+    session.add(row)
+    session.commit()
+    session.refresh(row)
+    return row
+
+
+def delete_config(session: Session, key: str):
+    """删除配置项。"""
+    row = session.exec(select(SiteConfig).where(SiteConfig.key == key)).first()
+    if not row:
+        raise HTTPException(404, f"配置 {key} 不存在")
+    session.delete(row)
+    session.commit()
+
+
 def get_config(session: Session, key: str) -> any:
     row = session.exec(select(SiteConfig).where(SiteConfig.key == key)).first()
     if not row:

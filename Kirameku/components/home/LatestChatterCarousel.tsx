@@ -117,7 +117,7 @@ export default function LatestChatterCarousel() {
 
   if (!items.length) {
     return (
-      <div className="w-full h-full rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl min-h-[220px] flex flex-col items-center justify-center gap-3 text-slate-400 dark:text-slate-500">
+      <div className="w-full h-full rounded-3xl bg-white/40 dark:bg-slate-800/50 backdrop-blur-md border border-white/40 dark:border-white/10 shadow-xl min-h-[160px] md:min-h-[220px] flex flex-col items-center justify-center gap-3 text-slate-400 dark:text-slate-500">
         <MessageSquare className="w-10 h-10 opacity-40" />
         <span className="text-sm">暂无说说</span>
       </div>
@@ -130,7 +130,7 @@ export default function LatestChatterCarousel() {
 
   return (
     <div
-      className="w-full h-full rounded-3xl overflow-hidden relative min-h-[220px] select-none cursor-grab active:cursor-grabbing touch-none"
+      className="w-full h-full rounded-3xl overflow-hidden relative min-h-[160px] md:min-h-[220px] select-none cursor-grab active:cursor-grabbing touch-none"
       onMouseDown={(e) => {
         e.preventDefault();
         handlePointerDown(e.clientX, e.clientY);
@@ -173,7 +173,7 @@ export default function LatestChatterCarousel() {
                 ? { duration: 0 }
                 : { type: "spring", stiffness: 400, damping: 30 }
             }
-            className={`absolute inset-0 rounded-3xl border shadow-lg p-5 flex flex-col justify-between pointer-events-none overflow-hidden ${
+            className={`absolute inset-0 rounded-3xl border shadow-lg p-3 md:p-5 flex flex-col justify-between pointer-events-none overflow-hidden ${
               isTop
                 ? "bg-white dark:bg-slate-800 border-white/50 dark:border-white/10"
                 : "bg-slate-200 dark:bg-slate-700 border-slate-200 dark:border-slate-700"

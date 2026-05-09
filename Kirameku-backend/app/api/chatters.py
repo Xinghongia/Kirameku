@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, Query, Request
 from sqlmodel import Session
 
-from app.database import get_session
+from app.deps import get_session
 from app.schemas import (
     ChatterCreate, ChatterUpdate, ChatterOut,
     ChatterCommentCreate, ChatterCommentOut,
 )
 from app.services import chatter_service
-from app.utils.auth import get_current_user
+from app.deps import get_current_user
 
 router = APIRouter(prefix="/api/chatters", tags=["说说"])
 

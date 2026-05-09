@@ -1,16 +1,23 @@
 import { http } from "@/utils/http";
 
+export type GitHubUserInfo = {
+  id: number;
+  login: string;
+  avatar: string;
+  bio: string;
+};
+
 export type MessageItem = {
   id: number;
-  nickname: string;
-  email: string;
-  website: string;
+  github_user_id: number | null;
+  parent_id: number | null;
   content: string;
-  avatar: string;
   ip: string;
   status: string;
   likes: number;
   created_at: string;
+  github_user: GitHubUserInfo | null;
+  replies: MessageItem[];
 };
 
 /** 管理-获取留言列表 */
