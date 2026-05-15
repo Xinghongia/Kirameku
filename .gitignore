@@ -7,6 +7,7 @@ node_modules/
 .next/
 out/
 build/
+!Kirameku-backend/admin/build/
 dist/
 
 # 环境变量
