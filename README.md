@@ -134,6 +134,10 @@ pip install -r requirements.txt
 cp .env.example .env
 # 编辑 .env，填入数据库、密钥、OSS 等配置
 
+# 配置config.py
+# 位置在/app文件夹内
+# 配置OSS相关内容
+
 # 初始化数据库
 psql -U postgres -d your_db -f init_db.sql
 
