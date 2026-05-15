@@ -17,7 +17,7 @@ from app.config import (
 
 router = APIRouter(prefix="/api/upload", tags=["上传"])
 
-ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif"}
+ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp", "image/gif", "image/svg+xml"}
 MAX_SIZE = 10 * 1024 * 1024  # 10MB
 
 

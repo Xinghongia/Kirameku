@@ -9,6 +9,7 @@ from app.models.project import Project
 from app.models.friend_link import FriendLink
 from app.models.site_config import SiteConfig
 from app.models.bookmark import BookmarkCategory, BookmarkSite
+from app.models.visitor import Visitor
 
 __all__ = [
     "User",
@@ -22,4 +23,5 @@ __all__ = [
     "FriendLink",
     "SiteConfig",
     "BookmarkCategory", "BookmarkSite",
+    "Visitor",
 ]

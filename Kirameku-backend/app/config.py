@@ -19,7 +19,7 @@ GITHUB_CLIENT_SECRET = os.environ.get("GITHUB_CLIENT_SECRET", "")
 # 阿里云 OSS 配置
 OSS_ACCESS_KEY_ID = os.environ["OSS_ACCESS_KEY_ID"]
 OSS_ACCESS_KEY_SECRET = os.environ["OSS_ACCESS_KEY_SECRET"]
-OSS_BUCKET_NAME = "hiromu520"
-OSS_ENDPOINT = "oss-cn-beijing.aliyuncs.com"
-OSS_CUSTOM_DOMAIN = "https://static.hiromu.top"
-OSS_PREFIX = "Boke/"
+OSS_BUCKET_NAME = os.environ["OSS_BUCKET_NAME"]
+OSS_ENDPOINT = os.environ["OSS_ENDPOINT"]
+OSS_CUSTOM_DOMAIN = os.environ["OSS_CUSTOM_DOMAIN"]
+OSS_PREFIX = os.environ["OSS_PREFIX"]

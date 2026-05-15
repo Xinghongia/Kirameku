@@ -270,6 +270,27 @@ CREATE TABLE IF NOT EXISTS site_config (
 );
 
 -- ============================================
+-- 18. Visitor（访客记录）
+-- ============================================
+CREATE TABLE IF NOT EXISTS visitor (
+    id            SERIAL PRIMARY KEY,
+    ip            VARCHAR(45)  NOT NULL,
+    path          VARCHAR(500) DEFAULT '',
+    user_agent    TEXT         DEFAULT '',
+    city          VARCHAR(100) DEFAULT '',
+    region        VARCHAR(100) DEFAULT '',
+    country       VARCHAR(100) DEFAULT '',
+    org           VARCHAR(200) DEFAULT '',
+    browser       VARCHAR(50)  DEFAULT '',
+    os            VARCHAR(50)  DEFAULT '',
+    device_type   VARCHAR(20)  DEFAULT '',
+    created_at    TIMESTAMP    DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_visitor_ip ON visitor(ip);
+CREATE INDEX IF NOT EXISTS idx_visitor_created ON visitor(created_at DESC);
+
+-- ============================================
 -- 插入默认管理员账号（密码: admin123）
 -- bcrypt hash of "admin123"
 -- ============================================

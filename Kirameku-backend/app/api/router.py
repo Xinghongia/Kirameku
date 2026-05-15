@@ -16,6 +16,7 @@ from app.api.friend_links import router as friend_links_router
 from app.api.site_config import router as site_config_router
 from app.api.upload import router as upload_router
 from app.api.bookmarks import router as bookmarks_router
+from app.api.visitors import router as visitors_router
 
 api_router = APIRouter()
 
@@ -33,3 +34,4 @@ api_router.include_router(friend_links_router)
 api_router.include_router(site_config_router)
 api_router.include_router(upload_router)
 api_router.include_router(bookmarks_router)
+api_router.include_router(visitors_router)

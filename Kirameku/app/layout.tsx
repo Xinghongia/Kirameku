@@ -13,6 +13,7 @@ import ClickEffect from "@/components/ui/ClickEffect";
 import RadialMenu from "@/components/ui/RadialMenu";
 import MouseTrail from "@/components/ui/MouseTrail";
 import WelcomeScreen from "@/components/layout/WelcomeScreen";
+import VisitorTracker from "@/components/layout/VisitorTracker";
 import { siteConfig } from "@/siteConfig";
 
 const geistSans = Geist({
@@ -55,6 +56,7 @@ export default function RootLayout({
               <MusicProvider>
                 <ToastProvider>
                   <BackgroundRenderer />
+                  <VisitorTracker />
                   <ClickEffect />
                   <RadialMenu />
                   <MouseTrail />

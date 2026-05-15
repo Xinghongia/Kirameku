@@ -80,7 +80,13 @@ function openDialog(title: string, row?: BookmarkCategoryItem) {
       sort: row.sort ?? 0
     };
   } else {
-    form.value = { id: 0, name: "", icon: "", description: "", sort: 0 };
+    form.value = {
+      id: 0,
+      name: "",
+      icon: "",
+      description: "",
+      sort: dataList.value.length + 1
+    };
   }
   dialogVisible.value = true;
 }
@@ -168,8 +174,9 @@ async function handleCatIconUpload(uploadFile: any) {
   if (!file) return;
   catUploading.value = true;
   try {
-    const compressed = await compressImage(file);
-    const res = await uploadImage(compressed);
+    const isSvg = file.type === "image/svg+xml" || file.name.endsWith(".svg");
+    const toUpload = isSvg ? file : await compressImage(file);
+    const res = await uploadImage(toUpload);
     form.value.icon = res.url;
     message("图标上传成功", { type: "success" });
   } catch (e: any) {
@@ -184,8 +191,9 @@ async function handleSiteIconUpload(uploadFile: any) {
   if (!file) return;
   siteUploading.value = true;
   try {
-    const compressed = await compressImage(file);
-    const res = await uploadImage(compressed);
+    const isSvg = file.type === "image/svg+xml" || file.name.endsWith(".svg");
+    const toUpload = isSvg ? file : await compressImage(file);
+    const res = await uploadImage(toUpload);
     siteForm.value.icon = res.url;
     message("图标上传成功", { type: "success" });
   } catch (e: any) {
@@ -303,7 +311,7 @@ function openSiteDialog(title: string, row?: BookmarkSiteItem) {
       icon: "",
       description: "",
       platforms: [],
-      sort: 0
+      sort: sites.value.length + 1
     };
   }
   platformInput.value = "";

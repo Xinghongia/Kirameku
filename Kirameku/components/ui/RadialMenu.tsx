@@ -15,6 +15,7 @@ import {
   Music,
   User,
   Library,
+  Bookmark,
 } from "lucide-react";
 
 const navItems = [
@@ -23,6 +24,7 @@ const navItems = [
   { href: "/moments", label: "说说", icon: MessageSquare },
   { href: "/messages", label: "杂谈", icon: Newspaper },
   { href: "/novel", label: "小说", icon: Library },
+  { href: "/bookmark", label: "收藏夹", icon: Bookmark },
   { href: "/projects", label: "项目", icon: FolderGit2 },
   { href: "/friends", label: "友链", icon: Users },
   { href: "/photowall", label: "照片墙", icon: Camera },
@@ -154,7 +156,7 @@ export default function RadialMenu() {
                   <Icon className={`w-6 h-6 ${isActive ? "text-white" : "text-slate-600 dark:text-slate-300"}`} />
                 </div>
                 <span
-                  className={`text-xs font-medium whitespace-nowrap transition-all duration-100 ${
+                  className={`text-xs font-medium whitespace-nowrap transition-all duration-100 z-10 ${
                     isActive ? "text-white scale-110" : "text-white/70"
                   }`}
                 >

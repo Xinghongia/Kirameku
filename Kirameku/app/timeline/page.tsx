@@ -58,6 +58,7 @@ export default function TimelinePage() {
   const [allPosts, setAllPosts] = useState<PostItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [dragX, setDragX] = useState(0);
   const didDrag = useRef(false);
 
   useEffect(() => {
@@ -74,15 +75,6 @@ export default function TimelinePage() {
       .finally(() => setLoading(false));
   }, []);
 
-  function handlePostClick(e: React.MouseEvent, slug: string) {
-    if (didDrag.current) {
-      e.preventDefault();
-      return;
-    }
-    router.push(`/posts/${slug}`);
-  }
-
-  // 按发布时间排序（新→旧，最新的在前面）
   const sorted = useMemo(
     () =>
       [...allPosts].sort(
@@ -122,7 +114,6 @@ export default function TimelinePage() {
     return parts.join(" ");
   }, [totalWidth, RIVER_Y, AMPLITUDE, WAVELENGTH]);
 
-  // 河流底部镜像
   const riverPathBottom = useMemo(() => {
     const parts: string[] = [];
     const steps = Math.max(1, Math.ceil(totalWidth / 4));
@@ -138,6 +129,15 @@ export default function TimelinePage() {
     return parts.join(" ");
   }, [totalWidth, RIVER_Y, AMPLITUDE, WAVELENGTH]);
 
+  // 可视区域裁剪：只渲染屏幕范围 ± 2 张卡片
+  const viewWidth = typeof window !== "undefined" ? window.innerWidth : 1200;
+  const visibleRange = useMemo(() => {
+    const visibleLeft = -dragX - PADDING - (CARD_W + CARD_GAP) * 2;
+    const visibleRight = -dragX + viewWidth + PADDING + (CARD_W + CARD_GAP) * 2;
+    const startIdx = Math.max(0, Math.floor(visibleLeft / (CARD_W + CARD_GAP)));
+    const endIdx = Math.min(sorted.length, Math.ceil(visibleRight / (CARD_W + CARD_GAP)) + 1);
+    return { startIdx, endIdx };
+  }, [dragX, viewWidth, sorted.length, CARD_W, CARD_GAP, PADDING]);
 
   // ── 加载态 ──
   if (loading) {
@@ -188,20 +188,20 @@ export default function TimelinePage() {
       </motion.div>
 
       {/* 拖动区 */}
-        <div className="overflow-hidden pb-4 select-none">
-          <motion.div
-            drag="x"
-            dragMomentum
-            dragElastic={0.1}
-            dragConstraints={{ left: -(totalWidth - (typeof window !== "undefined" ? window.innerWidth : 1200)), right: 0 }}
-            initial={{ x: -(PADDING - (typeof window !== "undefined" ? (window.innerWidth - CARD_W) / 2 : 300)) }}
-            onDragStart={() => { didDrag.current = true; }}
-            onDragEnd={() => { setTimeout(() => { didDrag.current = false; }, 100); }}
-            className="cursor-grab active:cursor-grabbing"
-          >
+      <div className="overflow-hidden pb-4 select-none">
+        <motion.div
+          drag="x"
+          dragMomentum
+          dragElastic={0.1}
+          dragConstraints={{ left: -(totalWidth - (typeof window !== "undefined" ? window.innerWidth : 1200)), right: 0 }}
+          initial={{ x: -(PADDING - (typeof window !== "undefined" ? (window.innerWidth - CARD_W) / 2 : 300)) }}
+          onDrag={(_, info) => { setDragX(info.offset.x); }}
+          onDragStart={() => { didDrag.current = true; }}
+          onDragEnd={() => { setTimeout(() => { didDrag.current = false; }, 100); }}
+          className="cursor-grab active:cursor-grabbing"
+        >
           <svg width={totalWidth} height={svgHeight} viewBox={`0 ${SVG_TOP} ${totalWidth} ${svgHeight}`} className="block">
             <defs>
-              {/* 河流渐变 */}
               <linearGradient id="river-grad" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#38bdf8" stopOpacity="0" />
                 <stop offset="5%" stopColor="#38bdf8" stopOpacity="0.5" />
@@ -216,35 +216,40 @@ export default function TimelinePage() {
                 <stop offset="95%" stopColor="#38bdf8" stopOpacity="0.3" />
                 <stop offset="100%" stopColor="#38bdf8" stopOpacity="0" />
               </linearGradient>
-              {/* 发光滤镜 */}
-              <filter id="river-glow" x="-5%" y="-20%" width="110%" height="140%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="6" />
-              </filter>
-              <filter id="dot-glow" x="-100%" y="-100%" width="300%" height="300%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
-              </filter>
+              {!isMobile && (
+                <>
+                  <filter id="river-glow" x="-5%" y="-20%" width="110%" height="140%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="6" />
+                  </filter>
+                  <filter id="dot-glow" x="-100%" y="-100%" width="300%" height="300%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="3" />
+                  </filter>
+                </>
+              )}
             </defs>
 
-            {/* 河流发光层 */}
-            <motion.path d={riverPath} fill="none" stroke="url(#river-grad)" strokeWidth="20" filter="url(#river-glow)" opacity="0.3" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, ease: "easeInOut" }} />
             {/* 河流主体 */}
             <motion.path d={riverPath} fill="none" stroke="url(#river-grad)" strokeWidth="3" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, ease: "easeInOut" }} />
+            {/* 河流发光层（PC） */}
+            {!isMobile && (
+              <motion.path d={riverPath} fill="none" stroke="url(#river-grad)" strokeWidth="20" filter="url(#river-glow)" opacity="0.3" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, ease: "easeInOut" }} />
+            )}
             {/* 河流底部微光 */}
             <motion.path d={riverPathBottom} fill="none" stroke="url(#river-grad-dark)" strokeWidth="1" opacity="0.15" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.8, ease: "easeInOut" }} />
 
             {/* 流动粒子 */}
-            {[0, 0.15, 0.3, 0.5, 0.65, 0.8].map((offset, i) => (
-              <circle key={i} r="3" fill="#38bdf8" opacity="0.7" filter="url(#dot-glow)">
+            {(isMobile ? [0, 0.3, 0.6] : [0, 0.15, 0.3, 0.5, 0.65, 0.8]).map((offset, i) => (
+              <circle key={i} r="3" fill="#38bdf8" opacity="0.7" filter={isMobile ? undefined : "url(#dot-glow)"}>
                 <animateMotion dur={`${8 + i * 1.5}s`} repeatCount="indefinite" begin={`${offset * (8 + i * 1.5)}s`}>
                   <mpath href="#river-flow-path" />
                 </animateMotion>
               </circle>
             ))}
-            {/* 隐藏路径供 animateMotion 使用 */}
             <path id="river-flow-path" d={riverPath} fill="none" stroke="none" />
 
-            {/* 文章卡片 */}
-            {sorted.map((post, i) => {
+            {/* 文章卡片（可视区域裁剪） */}
+            {sorted.slice(visibleRange.startIdx, visibleRange.endIdx).map((post, ri) => {
+              const i = visibleRange.startIdx + ri;
               const x = PADDING + i * (CARD_W + CARD_GAP);
               const cx = x + CARD_W / 2;
               const waveY =
@@ -260,27 +265,24 @@ export default function TimelinePage() {
               const catColor = getCatColor(post.category);
               const dateStr = formatDate(post.published_at || post.created_at);
 
-              const delay = 1.6 + i * 0.08;
-
               return (
-                <motion.g key={post.id} className="cursor-pointer" onClick={(e) => handlePostClick(e, post.slug)} initial={{ opacity: 0, y: isAbove ? -30 : 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay, ease: "easeOut" }}>
+                <g key={post.id} className="cursor-pointer" onClick={() => { if (!didDrag.current) router.push(`/posts/${post.slug}`); }}>
                   {/* 连接线 */}
                   <line x1={cx} y1={lineStartY} x2={cx} y2={lineEndY} stroke={catColor} strokeWidth="1.5" opacity="0.4" strokeDasharray="4 3" />
-                  {/* 河流上的节点 */}
-                  <motion.circle cx={cx} cy={waveY} r="6" fill="#ffffff" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.3, delay: delay - 0.1 }} />
-                  <motion.circle cx={cx} cy={waveY} r="10" fill="#ffffff" opacity="0.25" initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ duration: 0.3, delay: delay - 0.05 }} />
+                  {/* 河流节点 */}
+                  <circle cx={cx} cy={waveY} r="6" fill="#ffffff" />
+                  <circle cx={cx} cy={waveY} r="10" fill="#ffffff" opacity="0.25" />
                   {/* 时间标注 */}
                   <text x={cx} y={waveY + (isAbove ? 22 : -12)} textAnchor="middle" fill="#f8fafc" fontSize={isMobile ? "9" : "11"} fontWeight="700">
                     {dateStr}
                   </text>
 
-                  {/* 卡片背景 */}
+                  {/* 卡片 */}
                   <foreignObject x={x} y={cardY} width={CARD_W} height={CARD_H} style={{ overflow: "visible" }}>
-                    <div className="w-full h-full rounded-xl md:rounded-2xl overflow-hidden bg-white/60 dark:bg-slate-800/70 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
-                      {/* 封面 */}
+                    <div className={`w-full h-full rounded-xl md:rounded-2xl overflow-hidden border border-white/40 dark:border-white/10 shadow-lg transition-all duration-300 group ${isMobile ? "bg-white/80 dark:bg-slate-800/90" : "bg-white/60 dark:bg-slate-800/70 backdrop-blur-xl"}`}>
                       {post.cover ? (
                         <div className="relative overflow-hidden" style={{ height: isMobile ? 70 : 100 }}>
-                          <img src={post.cover} alt="" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                          <img src={post.cover} alt="" loading="lazy" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                           <div className="absolute bottom-1.5 left-2 md:bottom-2 md:left-3 flex items-center gap-1 text-white/80 text-[8px] md:text-[10px]">
                             <Calendar className="w-2.5 h-2.5 md:w-3 md:h-3" />
@@ -293,8 +295,6 @@ export default function TimelinePage() {
                           <span className="absolute bottom-1.5 left-2 md:bottom-2 md:left-3 text-[8px] md:text-[10px] text-slate-400">{dateStr}</span>
                         </div>
                       )}
-
-                      {/* 内容 */}
                       <div className="p-2 md:p-3">
                         <h3 className="text-[10px] md:text-xs font-bold text-slate-800 dark:text-slate-200 line-clamp-2 mb-1 md:mb-1.5 group-hover:text-sky-500 transition-colors leading-snug">
                           {post.title}
@@ -318,12 +318,12 @@ export default function TimelinePage() {
                       </div>
                     </div>
                   </foreignObject>
-                </motion.g>
+                </g>
               );
             })}
           </svg>
-          </motion.div>
-        </div>
+        </motion.div>
+      </div>
 
       {/* 提示 */}
       <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }} className="text-center text-[10px] md:text-xs text-slate-400 mt-3 md:mt-4 max-w-6xl mx-auto">
