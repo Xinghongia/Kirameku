@@ -52,7 +52,6 @@ const TrackingApp = lazy(() => import("./toolbox/TrackingApp"));
 const MovieBoxOfficeApp = lazy(() => import("./toolbox/MovieBoxOfficeApp"));
 const GitHubRepoApp = lazy(() => import("./toolbox/GitHubRepoApp"));
 const GitHubUserApp = lazy(() => import("./toolbox/GitHubUserApp"));
-const MyIPApp = lazy(() => import("./toolbox/MyIPApp"));
 const SearchApp = lazy(() => import("./toolbox/SearchApp"));
 
 interface AppDef {
@@ -459,19 +458,6 @@ const allApps: AppDef[] = [
       </svg>
     ),
     component: CalendarApp,
-  },
-  {
-    id: "myip",
-    name: "IP查询",
-    icon: (
-      <svg className="w-10 h-10" viewBox="0 0 24 24" fill="none">
-        <circle cx="12" cy="12" r="9" stroke="#0ea5e9" strokeWidth="1.5" />
-        <path d="M12 3c-3 4-3 8 0 9s3 5 0 9" stroke="#0ea5e9" strokeWidth="1.5" />
-        <path d="M3 12h18" stroke="#0ea5e9" strokeWidth="1.5" />
-        <circle cx="12" cy="12" r="1.5" fill="#0ea5e9" />
-      </svg>
-    ),
-    component: MyIPApp,
   },
   {
     id: "tracking",
