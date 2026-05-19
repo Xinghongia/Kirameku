@@ -144,7 +144,7 @@ export function useNav() {
 
   /** 获取`logo` */
   function getLogo() {
-    return new URL("/icon.png", import.meta.url).href;
+    return `${import.meta.env.BASE_URL}icon.png`;
   }
 
   return {

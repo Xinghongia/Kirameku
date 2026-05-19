@@ -12,6 +12,7 @@ def _comment_to_dict(session: Session, c: Comment, include_ip: bool = False, fet
         "post_id": c.post_id,
         "parent_id": c.parent_id,
         "content": c.content,
+        "likes": c.likes,
         "status": c.status,
         "created_at": c.created_at,
         "github_user": {
@@ -110,6 +111,17 @@ def update_comment_status(session: Session, comment_id: int, status: str) -> dic
     session.commit()
     session.refresh(comment)
     return _comment_to_dict(session, comment)
+
+
+def toggle_comment_like(session: Session, comment_id: int, unlike: bool = False) -> dict:
+    c = session.get(Comment, comment_id)
+    if not c:
+        raise HTTPException(404, "评论不存在")
+    c.likes = max(0, c.likes + (-1 if unlike else 1))
+    session.add(c)
+    session.commit()
+    session.refresh(c)
+    return _comment_to_dict(session, c)
 
 
 def delete_comment(session: Session, comment_id: int):

@@ -55,6 +55,16 @@ def update_comment_status(
     return comment_service.update_comment_status(session, comment_id, data.status)
 
 
+@router.post("/{comment_id}/like", response_model=CommentOut)
+def like_comment(comment_id: int, session: Session = Depends(get_session)):
+    return comment_service.toggle_comment_like(session, comment_id, unlike=False)
+
+
+@router.post("/{comment_id}/unlike", response_model=CommentOut)
+def unlike_comment(comment_id: int, session: Session = Depends(get_session)):
+    return comment_service.toggle_comment_like(session, comment_id, unlike=True)
+
+
 @router.delete("/{comment_id}")
 def delete_comment(
     comment_id: int,

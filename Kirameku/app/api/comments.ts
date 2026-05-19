@@ -6,6 +6,7 @@ export interface CommentItem {
   post_id: number;
   parent_id: number | null;
   content: string;
+  likes: number;
   status: string;
   created_at: string;
   github_user: GitHubUser | null;
@@ -28,6 +29,13 @@ export function createComment(data: {
       Authorization: `Bearer ${getToken()}`,
     },
   });
+}
+
+export function likeComment(commentId: number, unlike = false) {
+  return request<CommentItem>(
+    `/api/comments/${commentId}/${unlike ? "unlike" : "like"}`,
+    { method: "POST" }
+  );
 }
 
 function getToken(): string {

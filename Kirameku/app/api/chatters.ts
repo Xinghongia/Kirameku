@@ -18,6 +18,7 @@ export interface ChatterCommentItem {
   chatter_id: number;
   parent_id: number | null;
   content: string;
+  likes: number;
   status: string;
   created_at: string;
   github_user: GitHubUser | null;
@@ -70,6 +71,13 @@ export function createChatterComment(data: {
 export function likeChatter(chatterId: number, unlike = false) {
   return request<{ likes: number }>(
     `/api/chatters/${chatterId}/${unlike ? "unlike" : "like"}`,
+    { method: "POST" }
+  );
+}
+
+export function likeChatterComment(commentId: number, unlike = false) {
+  return request<ChatterCommentItem>(
+    `/api/chatters/comments/${commentId}/${unlike ? "unlike" : "like"}`,
     { method: "POST" }
   );
 }

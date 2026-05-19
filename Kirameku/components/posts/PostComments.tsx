@@ -3,10 +3,11 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, Send, Reply, ChevronDown, ChevronUp, LogOut } from "lucide-react";
+import { MessageCircle, Heart, Send, Reply, ChevronDown, ChevronUp, LogOut } from "lucide-react";
 import {
   getPostComments,
   createComment,
+  likeComment,
   type CommentItem,
 } from "@/app/api/comments";
 import type { GitHubUser } from "@/app/api/types";
@@ -69,6 +70,11 @@ export default function PostComments({ postId }: { postId: number }) {
   const [replyTo, setReplyTo] = useState<CommentItem | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [expandedReplies, setExpandedReplies] = useState<Set<number>>(new Set());
+  const [likedIds, setLikedIds] = useState<Set<number>>(() => {
+    if (typeof window === "undefined") return new Set();
+    const saved = localStorage.getItem("liked_comments");
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
@@ -180,7 +186,30 @@ export default function PostComments({ postId }: { postId: number }) {
     setInputValue("");
   }
 
-  const flatReplies = (replies: CommentItem[]) => flattenReplies(replies);
+  async function handleLike(commentId: number) {
+    const alreadyLiked = likedIds.has(commentId);
+    try {
+      const updated = await likeComment(commentId, alreadyLiked);
+      setLikedIds((prev) => {
+        const next = new Set(prev);
+        if (alreadyLiked) next.delete(commentId);
+        else next.add(commentId);
+        localStorage.setItem("liked_comments", JSON.stringify([...next]));
+        return next;
+      });
+      setComments((prev) =>
+        prev.map((c) => {
+          if (c.id === commentId) return { ...c, likes: updated.likes };
+          return {
+            ...c,
+            replies: c.replies.map((r) =>
+              r.id === commentId ? { ...r, likes: updated.likes } : r
+            ),
+          };
+        })
+      );
+    } catch {}
+  }
 
   return (
     <div className="mt-8 md:mt-12">
@@ -309,7 +338,7 @@ export default function PostComments({ postId }: { postId: number }) {
             />
             <div className="flex items-center justify-between mt-2 pt-2 md:mt-3 md:pt-3 border-t border-slate-200/50 dark:border-white/5">
               <span className="text-[10px] md:text-xs text-slate-400">
-                {user ? "Ctrl + Enter 发送" : ""}
+                {"Ctrl + Enter 发送"}
               </span>
               <button
                 type="button"
@@ -381,7 +410,8 @@ export default function PostComments({ postId }: { postId: number }) {
               expandedReplies={expandedReplies}
               onReply={startReply}
               onToggleReplies={toggleReplies}
-              user={user}
+              likedIds={likedIds}
+              onLike={handleLike}
             />
           </motion.div>
         ))}
@@ -395,13 +425,15 @@ function CommentCard({
   expandedReplies,
   onReply,
   onToggleReplies,
-  user,
+  likedIds,
+  onLike,
 }: {
   comment: CommentItem;
   expandedReplies: Set<number>;
   onReply: (comment: CommentItem) => void;
   onToggleReplies: (id: number) => void;
-  user: GitHubUser | null;
+  likedIds: Set<number>;
+  onLike: (id: number) => void;
 }) {
   const isExpanded = expandedReplies.has(comment.id);
   const flat = flattenReplies(comment.replies ?? []);
@@ -446,6 +478,23 @@ function CommentCard({
         <div className="flex items-center gap-2 md:gap-4 pt-2 md:pt-3 border-t border-slate-200/50 dark:border-white/5">
           <button
             type="button"
+            onClick={() => onLike(comment.id)}
+            className={`flex items-center gap-1 md:gap-1.5 text-[10px] md:text-xs transition-colors ${
+              likedIds.has(comment.id)
+                ? "text-pink-500"
+                : "text-slate-400 hover:text-pink-500"
+            }`}
+          >
+            <Heart
+              className={`w-3.5 h-3.5 md:w-4 md:h-4 transition-all duration-300 ${
+                likedIds.has(comment.id) ? "fill-pink-500 scale-110" : ""
+              }`}
+            />
+            <span>{comment.likes}</span>
+          </button>
+
+          <button
+            type="button"
             onClick={() => onReply(comment)}
             className="flex items-center gap-1 md:gap-1.5 text-[10px] md:text-xs text-slate-400 hover:text-sky-500 transition-colors"
           >
@@ -484,8 +533,9 @@ function CommentCard({
                 <ReplyCard
                   key={reply.id}
                   reply={reply}
+                  likedIds={likedIds}
+                  onLike={onLike}
                   onReply={onReply}
-                  user={user}
                 />
               ))}
             </div>
@@ -498,12 +548,14 @@ function CommentCard({
 
 function ReplyCard({
   reply,
+  likedIds,
+  onLike,
   onReply,
-  user,
 }: {
   reply: CommentItem & { replyToUser?: string };
+  likedIds: Set<number>;
+  onLike: (id: number) => void;
   onReply: (comment: CommentItem) => void;
-  user: GitHubUser | null;
 }) {
   return (
     <div className="px-3 py-2 md:px-5 md:py-3 border-b border-slate-200/30 dark:border-white/5 last:border-0">
@@ -538,16 +590,32 @@ function ReplyCard({
             )}
             {reply.content}
           </p>
-          {user && (
+          <div className="flex items-center gap-2 md:gap-3 mt-1.5 md:mt-2">
+            <button
+              type="button"
+              onClick={() => onLike(reply.id)}
+              className={`flex items-center gap-0.5 md:gap-1 text-[10px] md:text-xs transition-colors ${
+                likedIds.has(reply.id)
+                  ? "text-pink-500"
+                  : "text-slate-400 hover:text-pink-500"
+              }`}
+            >
+              <Heart
+                className={`w-3 h-3 md:w-3.5 md:h-3.5 ${
+                  likedIds.has(reply.id) ? "fill-pink-500" : ""
+                }`}
+              />
+              <span>{reply.likes}</span>
+            </button>
             <button
               type="button"
               onClick={() => onReply(reply)}
-              className="flex items-center gap-0.5 md:gap-1 text-[10px] md:text-xs text-slate-400 hover:text-sky-500 transition-colors mt-1 md:mt-1.5"
+              className="flex items-center gap-0.5 md:gap-1 text-[10px] md:text-xs text-slate-400 hover:text-sky-500 transition-colors"
             >
               <Reply className="w-3 h-3 md:w-3.5 md:h-3.5" />
               <span>回复</span>
             </button>
-          )}
+          </div>
         </div>
       </div>
     </div>

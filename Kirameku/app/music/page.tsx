@@ -232,12 +232,14 @@ export default function MusicPage() {
               </div>
             </div>
 
-            {/* Current lyric */}
-            {currentLyric && (
-              <div className="mt-3 md:mt-4 text-xs md:text-sm text-indigo-600 dark:text-indigo-300 font-bold italic drop-shadow-sm">
-                &ldquo;{currentLyric}&rdquo;
-              </div>
-            )}
+            {/* Current lyric - always reserve space to prevent jitter */}
+            <div className="mt-3 md:mt-4 h-6 md:h-7 flex items-center">
+              {currentLyric && (
+                <span className="text-xs md:text-sm text-indigo-600 dark:text-indigo-300 font-bold italic drop-shadow-sm truncate w-full">
+                  &ldquo;{currentLyric}&rdquo;
+                </span>
+              )}
+            </div>
           </div>
         </div>
       </MusicCard>

@@ -43,6 +43,14 @@ export default function PhotoWallPreview() {
     return () => clearInterval(timer);
   }, [photos.length]);
 
+  // 预加载下一张，避免切图时重新请求
+  useEffect(() => {
+    if (photos.length < 2) return;
+    const next = (currentIndex + 1) % photos.length;
+    const img = new Image();
+    img.src = photos[next].url;
+  }, [currentIndex, photos]);
+
   const goNext = useCallback(() => {
     if (photos.length <= 1) return;
     setCurrentIndex((prev) => (prev + 1) % photos.length);
@@ -123,18 +131,18 @@ export default function PhotoWallPreview() {
       onMouseUp={handlePointerUp}
       onMouseLeave={handlePointerUp}
     >
-      <AnimatePresence mode="wait">
+      {/* 只渲染当前一张图，通过 JS 预加载下一张，AnimatePresence 做交叉渐隐 */}
+      <AnimatePresence>
         <motion.div
           key={photos[currentIndex].id}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          className="absolute inset-0 z-0"
+          transition={{ duration: 1.2 }}
+          className="absolute inset-0"
         >
           <img
             src={photos[currentIndex].url}
-            loading={currentIndex === 0 ? "eager" : "lazy"}
             draggable={false}
             className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none"
             alt=""

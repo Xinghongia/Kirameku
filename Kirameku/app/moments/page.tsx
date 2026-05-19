@@ -11,6 +11,7 @@ import {
 import Lightbox from "@/components/photos/Lightbox";
 import {
   getChatters, getChatterComments, createChatterComment, likeChatter,
+  likeChatterComment,
   type ChatterItem, type ChatterCommentItem,
 } from "@/app/api";
 import { getGithubUser } from "@/app/api/messages";
@@ -110,6 +111,11 @@ export default function MomentsPage() {
   const [commentsMap, setCommentsMap] = useState<Record<string, ChatterCommentItem[]>>({});
   const [commentsLoading, setCommentsLoading] = useState<Record<string, boolean>>({});
   const [expandedReplies, setExpandedReplies] = useState<Set<number>>(new Set());
+  const [likedCommentIds, setLikedCommentIds] = useState<Set<number>>(() => {
+    if (typeof window === "undefined") return new Set();
+    const saved = localStorage.getItem("liked_chatter_comments");
+    return saved ? new Set(JSON.parse(saved)) : new Set();
+  });
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
   // 恢复 GitHub 登录状态
@@ -190,6 +196,33 @@ export default function MomentsPage() {
   function handleLogin() { sessionStorage.setItem("github_redirect", window.location.pathname); window.location.href = "/api/auth/github/login"; }
   function handleLogout() { localStorage.removeItem("github_token"); localStorage.removeItem("github_user"); setUser(null); }
   function cancelReply() { setReplyTo(null); setCommentInput(""); }
+
+  async function handleCommentLike(commentId: number) {
+    const alreadyLiked = likedCommentIds.has(commentId);
+    try {
+      const updated = await likeChatterComment(commentId, alreadyLiked);
+      setLikedCommentIds((p) => {
+        const n = new Set(p);
+        if (alreadyLiked) n.delete(commentId); else n.add(commentId);
+        localStorage.setItem("liked_chatter_comments", JSON.stringify([...n]));
+        return n;
+      });
+      // 更新 commentsMap 中的点赞数
+      setCommentsMap((prev) => {
+        const next = { ...prev };
+        for (const key of Object.keys(next)) {
+          next[key] = next[key].map((c) => updateCommentLikes(c, commentId, updated.likes));
+        }
+        return next;
+      });
+    } catch {}
+  }
+
+  function updateCommentLikes(c: ChatterCommentItem, targetId: number, likes: number): ChatterCommentItem {
+    if (c.id === targetId) return { ...c, likes };
+    if (c.replies?.length) return { ...c, replies: c.replies.map((r) => updateCommentLikes(r, targetId, likes)) };
+    return c;
+  }
 
   function startReply(c: ChatterCommentItem) {
     setReplyTo(c); setCommentInput("");
@@ -387,7 +420,7 @@ export default function MomentsPage() {
                                   onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSubmitComment(parseInt(moment.id)); }}
                                   className="w-full bg-transparent text-xs text-slate-700 dark:text-slate-200 placeholder:text-slate-400 dark:placeholder:text-slate-500 resize-none outline-none disabled:cursor-not-allowed disabled:opacity-50" />
                                 <div className="flex items-center justify-between mt-1 pt-1 border-t border-slate-200/30 dark:border-white/5">
-                                  <span className="text-[10px] text-slate-400">{user ? "Ctrl + Enter 发送" : ""}</span>
+                                  <span className="text-[10px] text-slate-400">{"Ctrl + Enter 发送"}</span>
                                   <button type="button" onClick={() => handleSubmitComment(parseInt(moment.id))}
                                     disabled={!user || !commentInput.trim() || submitting}
                                     className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-sky-500 text-white text-[10px] font-medium hover:bg-sky-600 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
@@ -407,7 +440,8 @@ export default function MomentsPage() {
                                   <CommentCard key={comment.id} comment={comment} expandedReplies={expandedReplies}
                                     onReply={startReply}
                                     onToggleReplies={(id) => setExpandedReplies((p) => { const n = new Set(p); if (n.has(id)) n.delete(id); else n.add(id); return n; })}
-                                    user={user} />
+                                    likedCommentIds={likedCommentIds}
+                                    onCommentLike={handleCommentLike} />
                                 ))}
                               </div>
                             )}
@@ -442,9 +476,10 @@ export default function MomentsPage() {
   );
 }
 
-function CommentCard({ comment, expandedReplies, onReply, onToggleReplies, user }: {
+function CommentCard({ comment, expandedReplies, onReply, onToggleReplies, likedCommentIds, onCommentLike }: {
   comment: ChatterCommentItem; expandedReplies: Set<number>;
-  onReply: (c: ChatterCommentItem) => void; onToggleReplies: (id: number) => void; user: GitHubUser | null;
+  onReply: (c: ChatterCommentItem) => void; onToggleReplies: (id: number) => void;
+  likedCommentIds: Set<number>; onCommentLike: (id: number) => void;
 }) {
   const isExpanded = expandedReplies.has(comment.id);
   const flat = flattenReplies(comment.replies ?? []);
@@ -464,11 +499,13 @@ function CommentCard({ comment, expandedReplies, onReply, onToggleReplies, user 
         </div>
         <p className="text-[10px] md:text-xs text-slate-600 dark:text-slate-400 leading-relaxed whitespace-pre-wrap mb-1.5 md:mb-2 ml-7 md:ml-8">{comment.content}</p>
         <div className="flex items-center gap-2 ml-7 md:ml-8">
-          {user && (
-            <button type="button" onClick={() => onReply(comment)} className="flex items-center gap-0.5 text-[10px] text-slate-400 hover:text-sky-500 transition-colors">
+          <button type="button" onClick={() => onCommentLike(comment.id)} className={`flex items-center gap-0.5 text-[10px] transition-colors ${likedCommentIds.has(comment.id) ? "text-pink-500" : "text-slate-400 hover:text-pink-500"}`}>
+            <Heart className={`w-3 h-3 ${likedCommentIds.has(comment.id) ? "fill-pink-500" : ""}`} />
+            <span>{comment.likes}</span>
+          </button>
+          <button type="button" onClick={() => onReply(comment)} className="flex items-center gap-0.5 text-[10px] text-slate-400 hover:text-sky-500 transition-colors">
               <Reply className="w-3 h-3" />回复
             </button>
-          )}
           {replyCount > 0 && (
             <button type="button" onClick={() => onToggleReplies(comment.id)} className="flex items-center gap-0.5 text-[10px] text-slate-400 hover:text-blue-500 transition-colors ml-auto">
               {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
@@ -481,7 +518,7 @@ function CommentCard({ comment, expandedReplies, onReply, onToggleReplies, user 
         {isExpanded && replyCount > 0 && (
           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3 }} className="overflow-hidden">
             <div className="border-t border-slate-200/30 dark:border-white/5 bg-slate-50/30 dark:bg-slate-900/20">
-              {flat.map((reply) => <ReplyCard key={reply.id} reply={reply} onReply={onReply} user={user} />)}
+              {flat.map((reply) => <ReplyCard key={reply.id} reply={reply} onReply={onReply} likedCommentIds={likedCommentIds} onCommentLike={onCommentLike} />)}
             </div>
           </motion.div>
         )}
@@ -490,8 +527,9 @@ function CommentCard({ comment, expandedReplies, onReply, onToggleReplies, user 
   );
 }
 
-function ReplyCard({ reply, onReply, user }: {
-  reply: ChatterCommentItem & { replyToUser?: string }; onReply: (c: ChatterCommentItem) => void; user: GitHubUser | null;
+function ReplyCard({ reply, onReply, likedCommentIds, onCommentLike }: {
+  reply: ChatterCommentItem & { replyToUser?: string }; onReply: (c: ChatterCommentItem) => void;
+  likedCommentIds: Set<number>; onCommentLike: (id: number) => void;
 }) {
   return (
     <div className="px-2 py-1.5 md:px-3 md:py-2 border-b border-slate-200/20 dark:border-white/5 last:border-0">
@@ -510,11 +548,15 @@ function ReplyCard({ reply, onReply, user }: {
             {reply.replyToUser && <span className="text-sky-500 dark:text-sky-400 mr-1">回复 @{reply.replyToUser}：</span>}
             {reply.content}
           </p>
-          {user && (
-            <button type="button" onClick={() => onReply(reply)} className="flex items-center gap-0.5 text-[9px] text-slate-400 hover:text-sky-500 transition-colors mt-0.5">
+          <div className="flex items-center gap-2 mt-0.5">
+            <button type="button" onClick={() => onCommentLike(reply.id)} className={`flex items-center gap-0.5 text-[9px] transition-colors ${likedCommentIds.has(reply.id) ? "text-pink-500" : "text-slate-400 hover:text-pink-500"}`}>
+              <Heart className={`w-2.5 h-2.5 ${likedCommentIds.has(reply.id) ? "fill-pink-500" : ""}`} />
+              <span>{reply.likes}</span>
+            </button>
+            <button type="button" onClick={() => onReply(reply)} className="flex items-center gap-0.5 text-[9px] text-slate-400 hover:text-sky-500 transition-colors">
               <Reply className="w-2.5 h-2.5" />回复
             </button>
-          )}
+          </div>
         </div>
       </div>
     </div>

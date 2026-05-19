@@ -110,6 +110,16 @@ def delete_chatter_comment(
     return {"ok": True}
 
 
+@router.post("/comments/{comment_id}/like", response_model=ChatterCommentOut)
+def like_chatter_comment(comment_id: int, session: Session = Depends(get_session)):
+    return chatter_service.toggle_comment_like(session, comment_id, unlike=False)
+
+
+@router.post("/comments/{comment_id}/unlike", response_model=ChatterCommentOut)
+def unlike_chatter_comment(comment_id: int, session: Session = Depends(get_session)):
+    return chatter_service.toggle_comment_like(session, comment_id, unlike=True)
+
+
 # ---- 动态路由 ----
 
 @router.get("/{chatter_id}", response_model=ChatterOut)

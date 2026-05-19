@@ -20,6 +20,7 @@ class CommentOut(BaseModel):
     post_id: int
     parent_id: int | None
     content: str
+    likes: int = 0
     status: str
     created_at: datetime
     github_user: GitHubUserOut | None = None

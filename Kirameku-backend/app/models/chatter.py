@@ -26,5 +26,6 @@ class ChatterComment(SQLModel, table=True):
     github_user_id: Optional[int] = Field(default=None, foreign_key="github_user.id")
     content: str
     ip: str = Field(default="", max_length=45)
+    likes: int = Field(default=0)
     status: str = Field(default="approved", max_length=20, index=True)
     created_at: datetime = Field(default_factory=datetime.now)

@@ -15,9 +15,9 @@ interface EffectContextType {
 
 const EffectContext = createContext<EffectContextType>({
   clickEffect: true,
-  mouseTrail: true,
-  seasonalEffect: true,
-  sparkleEffect: true,
+  mouseTrail: false,
+  seasonalEffect: false,
+  sparkleEffect: false,
   toggleClickEffect: () => {},
   toggleMouseTrail: () => {},
   toggleSeasonalEffect: () => {},
@@ -26,9 +26,9 @@ const EffectContext = createContext<EffectContextType>({
 
 export function EffectProvider({ children }: { children: ReactNode }) {
   const [clickEffect, setClickEffect] = useState(true);
-  const [mouseTrail, setMouseTrail] = useState(true);
-  const [seasonalEffect, setSeasonalEffect] = useState(true);
-  const [sparkleEffect, setSparkleEffect] = useState(true);
+  const [mouseTrail, setMouseTrail] = useState(false);
+  const [seasonalEffect, setSeasonalEffect] = useState(false);
+  const [sparkleEffect, setSparkleEffect] = useState(false);
 
   // 从 localStorage 恢复状态
   useEffect(() => {
