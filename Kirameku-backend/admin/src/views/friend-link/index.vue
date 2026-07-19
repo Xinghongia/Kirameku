@@ -10,8 +10,11 @@ import {
 } from "@/api/friend-link";
 import type { FriendLinkItem } from "@/api/friend-link";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
+import type { UploadRequestHandler } from "element-plus";
 
 defineOptions({ name: "FriendLinkIndex" });
+
+const skipAutoUpload: UploadRequestHandler = () => Promise.resolve();
 
 // ========== 列表 ==========
 const loading = ref(false);
@@ -31,14 +34,18 @@ const columns: TableColumnList = [
     prop: "url",
     minWidth: 200,
     formatter: ({ url }) =>
-      url ? `<a href="${url}" target="_blank" class="text-blue-500">${url}</a>` : "-"
+      url
+        ? `<a href="${url}" target="_blank" class="text-blue-500">${url}</a>`
+        : "-"
   },
   {
     label: "描述",
     prop: "description",
     minWidth: 180,
     formatter: ({ description }) =>
-      description?.length > 50 ? description.slice(0, 50) + "..." : description || "-"
+      description?.length > 50
+        ? description.slice(0, 50) + "..."
+        : description || "-"
   },
   { label: "排序", prop: "sort", width: 80 },
   {
@@ -302,12 +309,7 @@ onMounted(() => onSearch());
       width="600px"
       destroy-on-close
     >
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-width="80px"
-      >
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="名称" prop="name">
           <el-input v-model="form.name" placeholder="友链名称" />
         </el-form-item>
@@ -334,7 +336,7 @@ onMounted(() => onSearch());
             </div>
             <el-upload
               :show-file-list="false"
-              :http-request="() => {}"
+              :http-request="skipAutoUpload"
               :before-upload="() => false"
               :on-change="handleAvatarUpload"
               accept="image/*"
@@ -363,7 +365,11 @@ onMounted(() => onSearch());
           <el-input-number v-model="form.sort" :min="0" :max="9999" />
         </el-form-item>
         <el-form-item label="审核">
-          <el-switch v-model="form.is_approved" active-text="通过" inactive-text="待审核" />
+          <el-switch
+            v-model="form.is_approved"
+            active-text="通过"
+            inactive-text="待审核"
+          />
         </el-form-item>
       </el-form>
       <template #footer>

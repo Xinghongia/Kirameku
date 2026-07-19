@@ -10,8 +10,11 @@ import {
 import type { ProjectItem } from "@/api/project";
 import { http } from "@/utils/http";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
+import type { UploadRequestHandler } from "element-plus";
 
 defineOptions({ name: "ProjectIndex" });
+
+const skipAutoUpload: UploadRequestHandler = () => Promise.resolve();
 
 const loading = ref(false);
 const dataList = ref<ProjectItem[]>([]);
@@ -223,10 +226,14 @@ async function handleCoverUpload(uploadFile: any) {
     const compressed = await compressImage(file);
     const formData = new FormData();
     formData.append("file", compressed);
-    const res = await http.request<{ url: string }>("post", "/api/upload/image", {
-      data: formData,
-      headers: { "Content-Type": "multipart/form-data" }
-    });
+    const res = await http.request<{ url: string }>(
+      "post",
+      "/api/upload/image",
+      {
+        data: formData,
+        headers: { "Content-Type": "multipart/form-data" }
+      }
+    );
     form.value.cover_image = res.url;
     message("封面上传成功", { type: "success" });
   } catch (e: any) {
@@ -240,14 +247,16 @@ function getStatusLabel(status: string): string {
   return statusOptions.find(s => s.value === status)?.label ?? status;
 }
 
-function getStatusType(status: string): string {
-  const map: Record<string, string> = {
+type TagType = "primary" | "success" | "warning" | "danger" | "info";
+
+function getStatusType(status: string): TagType {
+  const map: Record<string, TagType> = {
     developing: "warning",
     active: "success",
     archived: "info",
-    planned: ""
+    planned: "primary"
   };
-  return map[status] ?? "";
+  return map[status] ?? "primary";
 }
 
 onMounted(() => onSearch());
@@ -357,12 +366,7 @@ onMounted(() => onSearch());
       width="680px"
       destroy-on-close
     >
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-width="90px"
-      >
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="90px">
         <el-form-item label="项目名称" prop="name">
           <el-input v-model="form.name" placeholder="项目名称" />
         </el-form-item>
@@ -396,12 +400,17 @@ onMounted(() => onSearch());
             <div class="flex flex-col gap-2">
               <el-upload
                 :show-file-list="false"
-                :http-request="() => {}"
+                :http-request="skipAutoUpload"
                 :before-upload="() => false"
                 :on-change="handleCoverUpload"
                 accept="image/*"
               >
-                <el-button :loading="uploading" type="primary" plain size="small">
+                <el-button
+                  :loading="uploading"
+                  type="primary"
+                  plain
+                  size="small"
+                >
                   {{ form.cover_image ? "更换封面" : "上传封面" }}
                 </el-button>
               </el-upload>
@@ -463,16 +472,10 @@ onMounted(() => onSearch());
           />
         </el-form-item>
         <el-form-item label="线上地址">
-          <el-input
-            v-model="form.link_live"
-            placeholder="https://..."
-          />
+          <el-input v-model="form.link_live" placeholder="https://..." />
         </el-form-item>
         <el-form-item label="文档地址">
-          <el-input
-            v-model="form.link_docs"
-            placeholder="https://..."
-          />
+          <el-input v-model="form.link_docs" placeholder="https://..." />
         </el-form-item>
         <el-form-item label="排序">
           <el-input-number v-model="form.sort" :min="0" :max="9999" />

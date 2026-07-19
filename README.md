@@ -117,6 +117,8 @@
 
 ## 快速开始
 
+实测开发环境基线：Node.js `24.15.0`、pnpm `11.9.0`、Python `3.9.1`。前台和管理后台统一使用 pnpm，仓库中的 `pnpm-lock.yaml` 是唯一 JavaScript 依赖锁文件。
+
 ### 1. 后端
 
 ```bash
@@ -132,13 +134,14 @@ pip install -r requirements.txt
 
 # 配置环境变量
 cp .env.example .env
-# 编辑 .env，填入数据库、密钥、OSS 等配置
+# 编辑 .env，至少填写数据库连接和应用密钥
+# OSS 为可选配置，未配置时仅图片上传接口返回 503
 
 # 初始化数据库
 psql -U postgres -d your_db -f init_db.sql
 
 # 打包管理后台
-cd admin && pnpm install && pnpm build && cd ..
+cd admin && pnpm install --frozen-lockfile && pnpm build && cd ..
 
 # 启动
 uvicorn app.main:app --host 0.0.0.0 --port 8000
@@ -147,13 +150,15 @@ uvicorn app.main:app --host 0.0.0.0 --port 8000
 API 文档：`http://localhost:8000/docs`
 管理后台：`http://localhost:8000/admin`
 
+`GET /api/health` 是不访问数据库或 OSS 的 liveness 检查；`GET /api/health/ready` 会用 `SELECT 1` 检查 PostgreSQL readiness。数据库未启动时，应用、liveness、API 文档和 OpenAPI 仍可访问，readiness 返回 503，依赖数据库的业务接口不可用。
+
 ### 2. 前端
 
 ```bash
 cd Kirameku
 
-pnpm install
-pnpm dev                          # 开发模式 → http://localhost:3000
+pnpm install --frozen-lockfile
+pnpm dev --hostname 127.0.0.1 --port 3000
 
 # 部署
 pnpm build && pnpm start
@@ -178,11 +183,14 @@ DATABASE_URL=postgresql://user:password@host:5432/dbname
 # JWT
 SECRET_KEY=your-secret-key
 
-# 阿里云 OSS
-OSS_ACCESS_KEY_ID=your-access-key-id
-OSS_ACCESS_KEY_SECRET=your-access-key-secret
-OSS_ENDPOINT=oss-cn-xxx.aliyuncs.com
-OSS_BUCKET=your-bucket-name
+# 默认 false；仅本地开发需要自动建表时设为 true
+AUTO_CREATE_TABLES=false
+
+# 阿里云 OSS（可选，完整变量见 .env.example）
+OSS_ACCESS_KEY_ID=
+OSS_ACCESS_KEY_SECRET=
+OSS_ENDPOINT=
+OSS_BUCKET_NAME=
 ```
 
 ## 设计亮点

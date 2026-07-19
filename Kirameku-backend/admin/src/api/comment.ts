@@ -14,6 +14,7 @@ export type CommentItem = {
     avatar: string;
     bio: string;
   } | null;
+  replies?: CommentItem[];
 };
 
 /** 获取文章评论列表 */

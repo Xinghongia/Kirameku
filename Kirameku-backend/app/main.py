@@ -1,17 +1,18 @@
 from contextlib import asynccontextmanager
 from pathlib import Path
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from app.config import CORS_ORIGINS
-from app.database import init_db
+from app.config import AUTO_CREATE_TABLES, CORS_ORIGINS
+from app.database import check_database_connection, init_db
 from app.api import api_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    init_db()
+    if AUTO_CREATE_TABLES:
+        init_db()
     yield
 
 
@@ -42,6 +43,15 @@ if admin_dist.exists():
 @app.get("/api/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/api/health/ready")
+def readiness():
+    try:
+        check_database_connection()
+    except Exception:
+        raise HTTPException(status_code=503, detail="Database is not ready")
+    return {"status": "ready"}
 
 
 @app.get("/api/routes")

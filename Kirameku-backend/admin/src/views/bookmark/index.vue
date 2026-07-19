@@ -11,14 +11,14 @@ import {
   updateBookmarkSite,
   deleteBookmarkSite
 } from "@/api/bookmark";
-import type {
-  BookmarkCategoryItem,
-  BookmarkSiteItem
-} from "@/api/bookmark";
+import type { BookmarkCategoryItem, BookmarkSiteItem } from "@/api/bookmark";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { uploadImage } from "@/api/album";
+import type { UploadRequestHandler } from "element-plus";
 
 defineOptions({ name: "BookmarkIndex" });
+
+const skipAutoUpload: UploadRequestHandler = () => Promise.resolve();
 
 // ========== 分类列表 ==========
 const loading = ref(false);
@@ -232,11 +232,20 @@ const siteForm = ref({
 });
 const platformInput = ref("");
 const platformOptions = [
-  "Windows", "macOS", "Linux",
-  "Android", "iOS",
-  "Web", "Chrome", "Firefox", "Edge", "Safari",
-  "Chrome插件", "油猴脚本",
-  "Docker", "命令行"
+  "Windows",
+  "macOS",
+  "Linux",
+  "Android",
+  "iOS",
+  "Web",
+  "Chrome",
+  "Firefox",
+  "Edge",
+  "Safari",
+  "Chrome插件",
+  "油猴脚本",
+  "Docker",
+  "命令行"
 ];
 
 const siteRules = {
@@ -456,12 +465,7 @@ onMounted(() => onSearch());
       width="500px"
       destroy-on-close
     >
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-width="90px"
-      >
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="90px">
         <el-form-item label="分类名称" prop="name">
           <el-input v-model="form.name" placeholder="请输入分类名称" />
         </el-form-item>
@@ -477,14 +481,16 @@ onMounted(() => onSearch());
                 @click="form.icon = ''"
               >
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                  <path
+                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                  />
                 </svg>
               </el-icon>
             </div>
             <div class="flex flex-col gap-2 flex-1">
               <el-upload
                 :show-file-list="false"
-                :http-request="() => {}"
+                :http-request="skipAutoUpload"
                 :before-upload="() => false"
                 :on-change="handleCatIconUpload"
                 accept="image/*"
@@ -541,7 +547,10 @@ onMounted(() => onSearch());
       </template>
 
       <div v-loading="sitesLoading">
-        <el-empty v-if="!sites.length && !sitesLoading" description="暂无站点" />
+        <el-empty
+          v-if="!sites.length && !sitesLoading"
+          description="暂无站点"
+        />
         <pure-table
           v-else
           :data="sites"
@@ -571,10 +580,7 @@ onMounted(() => onSearch());
               >
                 {{ p }}
               </el-tag>
-              <span
-                v-if="!row.platforms?.length"
-                class="text-gray-400 text-xs"
-              >
+              <span v-if="!row.platforms?.length" class="text-gray-400 text-xs">
                 无
               </span>
             </div>
@@ -633,20 +639,26 @@ onMounted(() => onSearch());
               v-if="siteForm.icon"
               class="relative w-16 h-16 rounded overflow-hidden border border-gray-200 dark:border-gray-700 shrink-0"
             >
-              <el-image :src="siteForm.icon" fit="cover" class="w-full h-full" />
+              <el-image
+                :src="siteForm.icon"
+                fit="cover"
+                class="w-full h-full"
+              />
               <el-icon
                 class="absolute top-0 right-0 bg-black/60 text-white rounded-full cursor-pointer text-xs p-0.5"
                 @click="siteForm.icon = ''"
               >
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                  <path
+                    d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                  />
                 </svg>
               </el-icon>
             </div>
             <div class="flex flex-col gap-2 flex-1">
               <el-upload
                 :show-file-list="false"
-                :http-request="() => {}"
+                :http-request="skipAutoUpload"
                 :before-upload="() => false"
                 :on-change="handleSiteIconUpload"
                 accept="image/*"

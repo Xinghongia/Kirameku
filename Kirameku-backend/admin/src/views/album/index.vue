@@ -13,8 +13,11 @@ import {
 } from "@/api/album";
 import type { AlbumItem, PhotoItem } from "@/api/album";
 import { useRenderIcon } from "@/components/ReIcon/src/hooks";
+import type { UploadRequestHandler } from "element-plus";
 
 defineOptions({ name: "AlbumIndex" });
+
+const skipAutoUpload: UploadRequestHandler = () => Promise.resolve();
 
 // ========== 相册列表 ==========
 const loading = ref(false);
@@ -316,12 +319,7 @@ onMounted(() => onSearch());
       width="500px"
       destroy-on-close
     >
-      <el-form
-        ref="formRef"
-        :model="form"
-        :rules="rules"
-        label-width="90px"
-      >
+      <el-form ref="formRef" :model="form" :rules="rules" label-width="90px">
         <el-form-item label="相册名称" prop="title">
           <el-input v-model="form.title" placeholder="请输入相册名称" />
         </el-form-item>
@@ -357,7 +355,7 @@ onMounted(() => onSearch());
         drag
         multiple
         :show-file-list="false"
-        :http-request="() => {}"
+        :http-request="skipAutoUpload"
         :before-upload="() => false"
         :on-change="handleUpload"
         accept="image/*"
@@ -371,9 +369,7 @@ onMounted(() => onSearch());
           </el-icon>
           <el-icon v-else class="text-3xl text-blue-500 mb-2 is-loading">
             <svg viewBox="0 0 24 24" fill="currentColor">
-              <path
-                d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z"
-              />
+              <path d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8z" />
             </svg>
           </el-icon>
           <span class="text-sm text-gray-500">
@@ -387,7 +383,10 @@ onMounted(() => onSearch());
 
       <!-- 照片网格 -->
       <div v-loading="photosLoading">
-        <el-empty v-if="!photos.length && !photosLoading" description="暂无照片" />
+        <el-empty
+          v-if="!photos.length && !photosLoading"
+          description="暂无照片"
+        />
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           <div
             v-for="photo in photos"
@@ -423,7 +422,7 @@ onMounted(() => onSearch());
             </div>
             <!-- 方向标签 -->
             <el-tag
-              :type="photo.orientation === 'landscape' ? '' : 'warning'"
+              :type="photo.orientation === 'landscape' ? 'primary' : 'warning'"
               size="small"
               class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity"
             >

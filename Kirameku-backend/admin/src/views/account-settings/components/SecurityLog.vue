@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import dayjs from "dayjs";
 import { getMineLogs } from "@/api/user";
+import type { SecurityLogItem } from "@/api/user";
 import { reactive, ref, onMounted } from "vue";
 import { deviceDetection } from "@pureadmin/utils";
 import type { PaginationProps } from "@pureadmin/table";
@@ -10,7 +11,7 @@ defineOptions({
 });
 
 const loading = ref(true);
-const dataList = ref([]);
+const dataList = ref<SecurityLogItem[]>([]);
 const pagination = reactive<PaginationProps>({
   total: 0,
   pageSize: 10,
@@ -56,11 +57,11 @@ const columns: TableColumnList = [
 async function onSearch() {
   loading.value = true;
   const { code, data } = await getMineLogs();
-  if (code === 0) {
+  if (code === 0 && data) {
     dataList.value = data.list;
-    pagination.total = data.total;
-    pagination.pageSize = data.pageSize;
-    pagination.currentPage = data.currentPage;
+    pagination.total = data.total ?? 0;
+    pagination.pageSize = data.pageSize ?? 10;
+    pagination.currentPage = data.currentPage ?? 1;
   }
 
   setTimeout(() => {

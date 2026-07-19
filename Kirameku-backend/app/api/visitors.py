@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, Query, Request
 from sqlmodel import Session
 
-from app.deps import get_session
+from app.deps import get_current_user, get_session
 from app.services import visitor_service
 
 router = APIRouter(prefix="/api/visitors", tags=["访客记录"])
@@ -11,6 +11,7 @@ router = APIRouter(prefix="/api/visitors", tags=["访客记录"])
 def list_recent_visitors(
     page: int = Query(1, ge=1),
     size: int = Query(20, ge=1, le=100),
+    _: dict = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
     """获取最近访客列表"""
@@ -61,6 +62,7 @@ def record_visitor(
 @router.delete("/{visitor_id}")
 def delete_visitor(
     visitor_id: int,
+    _: dict = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
     """删除单条访客记录"""
@@ -69,7 +71,10 @@ def delete_visitor(
 
 
 @router.delete("")
-def clear_visitors(session: Session = Depends(get_session)):
+def clear_visitors(
+    _: dict = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
     """清空所有访客记录"""
     visitor_service.clear_visitors(session)
     return {"code": 0, "message": "ok"}

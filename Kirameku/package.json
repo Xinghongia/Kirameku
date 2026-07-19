@@ -2,9 +2,10 @@
   "name": "Kirameku",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.9.0",
   "scripts": {
-    "dev": "next dev",
-    "dev:clean": "rm -rf .next/dev && next dev",
+    "dev": "node scripts/next-dev.mjs",
+    "dev:clean": "node -e \"require('fs').rmSync('.next/dev',{recursive:true,force:true})\" && next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

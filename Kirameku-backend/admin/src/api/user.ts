@@ -15,6 +15,8 @@ export type UserResult = {
   };
 };
 
+export type RefreshTokenResult = UserResult;
+
 export type UserInfo = {
   avatar: string;
   username: string;
@@ -28,6 +30,15 @@ export type UserInfoResult = {
   code: number;
   message: string;
   data: UserInfo;
+};
+
+export type SecurityLogItem = {
+  summary: string;
+  ip: string;
+  address: string;
+  system: string;
+  browser: string;
+  operatingTime: string;
 };
 
 /** 登录 */
@@ -47,9 +58,13 @@ export const updateMine = (data: {
   bio?: string;
   avatar?: string;
 }) => {
-  return http.request<{ code: number; message: string }>("put", "/api/auth/me", {
-    data
-  });
+  return http.request<{ code: number; message: string }>(
+    "put",
+    "/api/auth/me",
+    {
+      data
+    }
+  );
 };
 
 /** 刷新token（后端暂未实现，占位） */
@@ -62,6 +77,11 @@ export const getMineLogs = (data?: object) => {
   return http.request<{
     code: number;
     message: string;
-    data?: { list: Array<any>; total?: number };
+    data?: {
+      list: SecurityLogItem[];
+      total?: number;
+      pageSize?: number;
+      currentPage?: number;
+    };
   }>("get", "/api/auth/me-logs", { data });
 };

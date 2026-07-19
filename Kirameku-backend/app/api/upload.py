@@ -22,6 +22,17 @@ MAX_SIZE = 10 * 1024 * 1024  # 10MB
 
 
 def _get_bucket():
+    configuration = (
+        OSS_ACCESS_KEY_ID,
+        OSS_ACCESS_KEY_SECRET,
+        OSS_BUCKET_NAME,
+        OSS_ENDPOINT,
+        OSS_CUSTOM_DOMAIN,
+        OSS_PREFIX,
+    )
+    if not all(configuration):
+        raise HTTPException(503, "OSS storage is not configured")
+
     auth = oss2.Auth(OSS_ACCESS_KEY_ID, OSS_ACCESS_KEY_SECRET)
     return oss2.Bucket(auth, OSS_ENDPOINT, OSS_BUCKET_NAME)
 
