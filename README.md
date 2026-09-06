@@ -212,5 +212,4 @@ OSS_BUCKET=your-bucket-name
 
 MIT
 
-## 推广
-https://vsllm.com
+
